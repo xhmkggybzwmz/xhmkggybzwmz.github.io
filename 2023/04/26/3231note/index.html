@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="cn">
+    <head>
+  <!-- 元数据 -->
+  <meta charset="utf-8">
+  <link rel="icon" href="/images/code.png">
+  
+  <title>3231note | INAB</title>
+  
+  <meta name="author" content="Xhmkggybz" />
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="robots" content="index,follow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta name="format-detection" content="telphone=no, email=no" />
+  
+    <meta name="keywords" content="COMP3231" />
+  
+  <meta name="description" content="UNSW COMP3231 23T1 notes">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3231note">
+<meta property="og:url" content="https://xhmkggybzwmz.github.io/2023/04/26/3231note/index.html">
+<meta property="og:site_name" content="INAB">
+<meta property="og:description" content="UNSW COMP3231 23T1 notes">
+<meta property="og:locale">
+<meta property="og:image" content="https://xhmkggybzwmz.github.io/2023/04/26/3231note/cover.png">
+<meta property="article:published_time" content="2023-04-25T14:32:58.000Z">
+<meta property="article:modified_time" content="2023-04-25T15:01:30.380Z">
+<meta property="article:author" content="Xhmkggybz">
+<meta property="article:tag" content="COMP3231">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://xhmkggybzwmz.github.io/2023/04/26/3231note/cover.png">
+  
+  <!-- 站点验证相关 -->
+  
+    
+    
+    
+  
+  <!-- 样式表文件 -->
+  <link rel="stylesheet" id="kratos-css" href="/css/kratosr.min.css" media="all"></script>
+  
+    <link rel="stylesheet" id="darkmode-css" href="/css/kr-color-dark.min.css" media="(prefers-color-scheme: dark)"></script>
+    <script src="/js/kr-dark.min.js"></script>
+  
+  
+    <link rel="stylesheet" id="highlight-css" href="/css/highlight/night-eighties.min.css" media="all"></script>
+  
+  <link rel="stylesheet" id="fontawe-css" href="/vendors/font-awesome@4.7.0/css/font-awesome.min.css" media="all"></script>
+  <link rel="stylesheet" id="nprogress-css" href="/vendors/nprogress@0.2.0/nprogress.css" media="all"></script>
+  
+  
+    <link rel="stylesheet" href="/vendors/aplayer@1.10.1/dist/APlayer.min.css"></script>
+  
+  
+    <link rel="stylesheet" href="/vendors/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"></script>
+  
+  <!-- 不得不预先加载的一些JS文件 -->
+  <script src="/vendors/jquery@3.6.0/dist/jquery.min.js"></script>
+  
+    <script src="/vendors/qrcode_js@1.0.0/qrcode.min.js"></script>
+  
+  
+  <style>
+    
+      .kratos-cover.kratos-cover-2 {
+        background-image: url('/images/Mei_header.jpg');
+      }
+    
+    
+      @media(min-width:768px) {
+        body.custom-background {
+          background-image: url('/images/bg.jpg');
+        }
+      }
+    
+  </style>
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+    <body class="custom-background">
+        <div id="kratos-wrapper">
+    <div id="kratos-page">
+        <div id="kratos-header">
+            <header id="kratos-desktop-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="nav-header">
+                        <nav id="kratos-menu-wrap">
+                            <ul id="kratos-primary-menu" class="sf-menu">
+                                
+                                    
+                                        <li>
+                                            
+                                                <a href="/">
+                                            
+                                                
+                                                    <i class="fa fa-home"></i>
+                                                
+                                                首页
+                                            </a>
+                                            
+                                        </li>
+                                    
+                                        <li>
+                                            
+                                                <a href="/archives/">
+                                            
+                                                
+                                                    <i class="fa fa-file"></i>
+                                                
+                                                档案馆
+                                            </a>
+                                            
+                                        </li>
+                                    
+                                        <li>
+                                            
+                                                <a href="/friends/">
+                                            
+                                                
+                                                    <i class="fa fa-paw"></i>
+                                                
+                                                好伙伴
+                                            </a>
+                                            
+                                        </li>
+                                    
+                                        <li>
+                                            
+                                                <a>
+                                            
+                                                
+                                                    <i class="fa fa-link"></i>
+                                                
+                                                链接
+                                            </a>
+                                            
+                                                <ul class="sub-menu">
+                                                    
+                                                        <li>
+                                                            <a target="_blank" rel="noopener" href="https://github.com/Candinya/Kratos-Rebirth">
+                                                                
+                                                                项目链接
+                                                            </a>
+                                                        </li>
+                                                    
+                                                        <li>
+                                                            <a target="_blank" rel="noopener" href="https://space.bilibili.com/347171299">
+                                                                
+                                                                Bilibili
+                                                            </a>
+                                                        </li>
+                                                    
+                                                        <li>
+                                                            <a target="_blank" rel="noopener" href="https://github.com/xhmkggybzwmz">
+                                                                
+                                                                github
+                                                            </a>
+                                                        </li>
+                                                    
+                                                </ul>
+                                            
+                                        </li>
+                                    
+                                
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </header>
+            <header id="kratos-mobile-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="color-logo"><a href="/">INAB</a></div>
+                    <div class="nav-toggle">
+                        <a class="kratos-nav-toggle js-kratos-nav-toggle">
+                            <i></i>
+                        </a>
+                    </div>
+                </div>
+            </header>
+        </div>
+        <div class="kratos-start kratos-hero-2">
+            <!-- <div class="kratos-overlay"></div> -->
+            <div class="kratos-cover kratos-cover-2 text-center">
+                <div class="desc desc2 animate-box">
+                    <a href="/">
+                        <h2>INAB</h2> <br />
+                        <span></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="kratos-blog-post">
+            <div class="container">
+                <div id="main" class="row">
+                    
+
+        
+
+            <section class="col-md-8">
+
+        
+
+            <article itemscope itemtype="https://schema.org/Article">
+    
+    <link itemprop="mainEntityOfPage" href="https://xhmkggybzwmz.github.io/2023/04/26/3231note/">
+    <div class="kratos-hentry kratos-post-inner clearfix">
+        <header class="kratos-entry-header">
+            
+                <h1 class="kratos-entry-title text-center" itemprop="name headline">3231note</h1>
+            
+            
+            <ul class="kratos-post-meta text-center">
+                <li><time datetime="2023-04-25T14:32:58.000Z" itemprop="datePublished"><i class="fa fa-calendar"></i> 2023-04-26</time></li>
+                <li itemprop="author" itemscope itemtype="https://schema.org/Person">
+                    <i class="fa fa-user"></i> 作者 <span itemprop="name">Xhmkggybz</span>
+                </li>
+                
+                    <li>
+                        <i class="fa fa-edit"></i> 
+                        
+                        
+                            ~19.22K
+                        
+                        字
+                    </li>
+                
+                
+            </ul>
+        </header>
+        <div class="kratos-post-content">
+            
+            <div id="expire-alert" class="alert alert-warning hidden" role="alert">
+                <div class="icon"><i class="fa fa-warning"></i></div>
+                <div class="text"><p>本文最后编辑于 <time datetime="1682434890380"></time> 前，其中的内容可能需要更新。</p></div>
+            </div>
+            
+            
+            
+            <hr />
+            <div itemprop="articleBody"><p>UNSW COMP3231 23T1 notes</p>
+<span id="more"></span>
+<h2 id="Lec-02-Processes-and-Threads"><a href="#Lec-02-Processes-and-Threads" class="headerlink" title="Lec 02 Processes and Threads"></a>Lec 02 Processes and Threads</h2><h3 id="Processes"><a href="#Processes" class="headerlink" title="Processes:"></a><strong>Processes:</strong></h3><p>• Also called a task or job</p>
+<p>• Memory image of an individual program</p>
+<p>• “Owner” of resources allocated for program execution</p>
+<p>• Encompasses one or more threads </p>
+<h3 id="Threads"><a href="#Threads" class="headerlink" title="Threads:"></a><strong>Threads:</strong></h3><p>• Unit of execution 执行命令的单位</p>
+<p>• Can be traced</p>
+<p>• list the sequence of instructions that execute</p>
+<p>• Belongs to a process</p>
+<p>• Executes within it.</p>
+<p>One Process may contain one or more threads.</p>
+<img src="/2023/04/26/3231note/1.png" class="" title="Threads">
+<h3 id="Process-Termination"><a href="#Process-Termination" class="headerlink" title="Process Termination"></a><strong>Process Termination</strong></h3><p>Conditions which terminate processes</p>
+<p>1. Normal exit (voluntary)</p>
+<p>2. Error exit (voluntary)</p>
+<p>3. Fatal error (involuntary)</p>
+<p>4. Killed by another process (involuntary)</p>
+<h3 id="Process-and-Thread-States"><a href="#Process-and-Thread-States" class="headerlink" title="Process and Thread States"></a><strong>Process and Thread States</strong></h3><p>Running</p>
+<p>Blocked</p>
+<p>Ready</p>
+<h4 id="Running-→-Ready"><a href="#Running-→-Ready" class="headerlink" title="Running → Ready"></a><strong>Running → Ready</strong></h4><p>• Voluntary Yield()</p>
+<p>• End of timeslice</p>
+<h4 id="Running-→-Blocked"><a href="#Running-→-Blocked" class="headerlink" title="Running → Blocked"></a><strong>Running → Blocked</strong></h4><p>• Waiting for input</p>
+<p>• File, network, </p>
+<p>• Waiting for a timer (alarm signal)</p>
+<p>• Waiting for a resource to become available</p>
+<h3 id="Schedular"><a href="#Schedular" class="headerlink" title="Schedular"></a><strong>Schedular</strong></h3><p>Sometime called as <strong>dispatcher</strong>, it will choose a ready process to run.</p>
+<p>BUT: It is inefficient to search through all processes</p>
+<p>e.g: Ready Queue &amp; Blocked Queue</p>
+<img src="/2023/04/26/3231note/2.png" class="" title="P21_lec02">
+
+
+<h3 id="Thread-Model"><a href="#Thread-Model" class="headerlink" title="Thread Model"></a><strong>Thread Model</strong></h3><table>
+<thead>
+<tr>
+<th>Per process items</th>
+<th>Per thread items</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><p>Address space</p><p>Global variables</p><p>Open files</p><p>Child processes</p><p>Pending alarms</p><p>Signals and signal handlers</p><p>Accounting information</p></td>
+<td><p>Program counter</p><p>Registers</p><p>Stack (Each thread has its own stack)</p><p>State</p><p><img src="/2023/04/26/3231note/3.png" class="" title="Thread Model"></p></td>
+</tr>
+</tbody></table>
+<p>Local variables are per thread (allocated on the stack)</p>
+<p>Global variables are shared between all threads (Allocated in the data section)</p>
+<p><strong>Concurrency control is an issue.</strong></p>
+<p>Dynamically allocated memory can be global or local -&gt; Program defined</p>
+<img src="/2023/04/26/3231note/4.png" class="" title="P29_lec02">
+
+<h3 id="Thread-Usage"><a href="#Thread-Usage" class="headerlink" title="Thread Usage"></a><strong>Thread Usage</strong></h3><table>
+<thead>
+<tr>
+<th><strong>Model 模型</strong></th>
+<th><strong>Characteristics 特性</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Threads</td>
+<td>Parallelism. Blocking system calls</td>
+</tr>
+<tr>
+<td>Single-threaded Process</td>
+<td>No parallelism, blocking system calls</td>
+</tr>
+<tr>
+<td>Finite-state Machine</td>
+<td>Parallelism, nonblocking system calls, interrupts</td>
+</tr>
+</tbody></table>
+<h3 id="Summary-in-Threads"><a href="#Summary-in-Threads" class="headerlink" title="Summary in Threads"></a><strong>Summary in Threads</strong></h3><ol>
+<li><strong>Simpler to program than a state machine</strong></li>
+<li><strong>Less resources associated with threads than multiple complete processes</strong><ol>
+<li><strong>Cheaper to create and destroy</strong></li>
+<li><strong>Share resources (especially memory) between them</strong></li>
+</ol>
+</li>
+<li><strong>Performance: Threads waiting for IO can be overlapped with computing threads</strong><ol>
+<li><strong>If all threads are compute bound(被运算速度限制), then there is no performance improvement (on uniprocessor)</strong></li>
+</ol>
+</li>
+<li><strong>Threads can take advantage of the parallelism available on machines with more than one CPU (multiprocessor)</strong></li>
+</ol>
+<h2 id="Lec-03-Concurrency-and-Synchronisation"><a href="#Lec-03-Concurrency-and-Synchronisation" class="headerlink" title="Lec 03 Concurrency and Synchronisation"></a>Lec 03 Concurrency and Synchronisation</h2><h3 id="Concurrency-Example"><a href="#Concurrency-Example" class="headerlink" title="Concurrency Example:"></a><strong>Concurrency Example:</strong></h3><p>Trying to modify a global variable in two threads</p>
+<img src="/2023/04/26/3231note/5.png" class="" title="Concurrency Example">
+
+<p><strong>The reason for why there is in-kernel concurrency for single-threaded processes:</strong></p>
+<ol>
+<li>Multi-tasking</li>
+<li>Interrupt handling</li>
+<li>Device drivers</li>
+<li>System calls</li>
+<li>Resource sharing</li>
+</ol>
+<img src="/2023/04/26/3231note/6.png" class="" title="P6_lec03">
+<h3 id="Critical-Region-and-how-to-identify"><a href="#Critical-Region-and-how-to-identify" class="headerlink" title="Critical Region and how to identify"></a><strong>Critical Region and how to identify</strong></h3><p>A critical region is a region of code where shared resources are accessed.</p>
+<p><strong>We can control access to the shared resource by controlling access to the code that accesses the resource.</strong></p>
+<p>Uncoordinated entry to the critical region results in a race condition (<strong>Concurrency Occurs</strong>)</p>
+<p><strong>HOW TO IDENTIFY:</strong></p>
+<p>Critical regions are the regions of code that </p>
+<ol>
+<li>access a shared resource,</li>
+<li>and correctness <strong>relies on the shared resource not being concurrently modified</strong> by another thread&#x2F;process&#x2F;entity.\</li>
+</ol>
+<p><strong>HOW TO PREVENT:</strong></p>
+<img src="/2023/04/26/3231note/7.png" class="" title="Critical Region">
+<h3 id="Critical-Regions-Solutions"><a href="#Critical-Regions-Solutions" class="headerlink" title="Critical Regions Solutions"></a><strong>Critical Regions Solutions</strong></h3><p>Conditions required of any solution to the critical region problem:</p>
+<ol>
+<li>Mutual exclusion:<ol>
+<li>No two processes&#x2F;threads in the critical region at the same time</li>
+</ol>
+</li>
+<li>No assumptions made about speeds or numbers of CPUs</li>
+<li>No process running outside its critical region may block another process</li>
+<li>No process waited forever to enter its critical region (<strong>Bounded</strong>)</li>
+</ol>
+<h3 id="Mutual-exclusion-by-taking-turns"><a href="#Mutual-exclusion-by-taking-turns" class="headerlink" title="Mutual exclusion by taking turns"></a><strong>Mutual exclusion by taking turns</strong></h3><p>Works for solving concurrency issues: <strong>strict alternation -&gt; each process takes turns</strong></p>
+<p>Cons (缺点)</p>
+<ol>
+<li>Busy waiting</li>
+<li>Process must wait its turn even while the other process is doing something else<ol>
+<li>In a multiple processes condition, must wait for everyone to have a turn<ol>
+<li>Does not guarantee progress if a process no longer needs a turn</li>
+</ol>
+</li>
+<li>Poor solution when processes require the critical section at different rates</li>
+</ol>
+</li>
+</ol>
+<h3 id="Mutual-Exclusion-by-disabling-interrupts"><a href="#Mutual-Exclusion-by-disabling-interrupts" class="headerlink" title="Mutual Exclusion by disabling interrupts"></a><strong>Mutual Exclusion by disabling interrupts</strong></h3><p>How it works:</p>
+<p>Before entering a critical region, disable interrupts.</p>
+<p>After leaving the critical region, enable interrupts.</p>
+<p><strong>Cons:</strong></p>
+<ol>
+<li>Only available in the kernel</li>
+<li>Delays everybody else, even with no contention<ol>
+<li>Slows the interrupt response time</li>
+</ol>
+</li>
+<li>Does not work on a multiprocessor</li>
+</ol>
+<h3 id="Hardware-Support-for-mutual-exclusion"><a href="#Hardware-Support-for-mutual-exclusion" class="headerlink" title="Hardware Support for mutual exclusion"></a><strong>Hardware Support for mutual exclusion</strong></h3><p><strong>Test and Set instruction</strong></p>
+<p>•Can be used to implement lock variables correctly</p>
+<p>•Load the value of the lock</p>
+<p>•If lock &#x3D;&#x3D; 0</p>
+<p>•Set the lock to 1</p>
+<p>•Return the result 0 -&gt; we acquire the lock</p>
+<p>•if lock &#x3D;&#x3D; 1</p>
+<p>• return 1 -&gt; another thread&#x2F;process has the lock</p>
+<p>•Hardware guarantees that the instruction executes atomically -&gt; not be interrupt</p>
+<img src="/2023/04/26/3231note/8.png" class="" title="Test And Set">
+
+<p><strong>Pros:</strong></p>
+<ol>
+<li>Simple (easy to verify work or not)</li>
+<li>Available at user level<ol>
+<li>Work with any number of processors</li>
+<li>To implement any number of lock variables</li>
+</ol>
+</li>
+</ol>
+<p><strong>Cons:</strong></p>
+<ol>
+<li>Busy waits (also named as a spin lock)<ol>
+<li>Consumes CPU</li>
+<li>Starvation is possible when a process leaves its critical section and more than one process is waiting.</li>
+</ol>
+</li>
+</ol>
+<h3 id="Tackling-the-busy-wait-problem"><a href="#Tackling-the-busy-wait-problem" class="headerlink" title="Tackling the busy-wait problem:"></a><strong>Tackling the busy-wait problem:</strong></h3><p>Sleep&#x2F;Wakeup</p>
+<ol>
+<li>When the process is waiting for an event, it calls sleep to block, instead of busy waiting.</li>
+<li>The event happens, the event generator (another process) calls wakeup to unblock the sleeping process.</li>
+<li>Waking a ready&#x2F;running process has no effect.</li>
+</ol>
+<h3 id="Producer-Consumer-Problem-bounded-buffer-problem"><a href="#Producer-Consumer-Problem-bounded-buffer-problem" class="headerlink" title="Producer-Consumer Problem(bounded buffer problem)"></a><strong>Producer-Consumer Problem(bounded buffer problem)</strong></h3><p>Description: producer produces data items and store items in a buffer.</p>
+<p>Consumer takes the items out of the buffer and consumes them.</p>
+<img src="/2023/04/26/3231note/9.png" class="" title="Producer Consumer">
+<h4 id="Issues"><a href="#Issues" class="headerlink" title="Issues:"></a><strong>Issues:</strong></h4><p>Producer</p>
+<p>Should sleep when the buffer is full.</p>
+<p>And wakeup when there is empty space in the buffer.</p>
+<p>The consumer can call wakeup when it consumes the first entry of the full buffer.</p>
+<p>Consumer</p>
+<p>Should sleep when the buffer is empty.</p>
+<p>And wakeup when there are items available.</p>
+<p>Producer can call wakeup when it adds the first item to the buffer.</p>
+<h3 id="Semaphores"><a href="#Semaphores" class="headerlink" title="Semaphores"></a><strong>Semaphores</strong></h3><p>Two primitives that are more powerful than simple sleep and wakeup alone.</p>
+<p>• P(): proberen, from Dutch to test.</p>
+<p>• V(): verhogen, from Dutch to increment.</p>
+<p>• Also called <strong>wait &amp; signal</strong>, <strong>down &amp; up</strong>.</p>
+<p>How it works:</p>
+<p>If a resource is not available, the corresponding semaphore blocks any process <strong>waiting</strong> for the resource.</p>
+<p>Blocked processes are put into a process queue maintained by the semaphore (avoids busy waiting!)</p>
+<p>When a process releases a resource, it <strong>signals</strong> this by means of the semaphore.</p>
+<p>Signaling resumes a blocked process if there is any.</p>
+<p><strong>Wait (P)</strong> and <strong>signal (V)</strong> operations <strong>cannot be interrupted</strong>.</p>
+<p>Complex coordination can be implemented by multiple semaphores.</p>
+<img src="/2023/04/26/3231note/10.png" class="" title="Semaphore">
+<img src="/2023/04/26/3231note/11.png" class="" title="Semaphore">
+
+<p><strong>The initial count determines how many waits can progress before blocking and requiring a signal.</strong></p>
+<h3 id="Producer-Consumer-problem-with-semaphores"><a href="#Producer-Consumer-problem-with-semaphores" class="headerlink" title="Producer Consumer problem with semaphores:"></a><strong>Producer Consumer problem with semaphores:</strong></h3><img src="/2023/04/26/3231note/12.png" class="" title="Define Semaphore">
+
+<img src="/2023/04/26/3231note/13.png" class="" title="Define Semaphore">
+<h3 id="Summarising-Semaphores"><a href="#Summarising-Semaphores" class="headerlink" title="Summarising Semaphores"></a><strong>Summarising Semaphores</strong></h3><p>Semaphores can be used to solve a variety of concurrency problems.</p>
+<p>However, programming with then can be error-prone:</p>
+<p>E.g. <strong>must signal for every wait</strong></p>
+<p>To many or too few signals or waits, or signals and waits in the wrong order, can have bad results.</p>
+<h3 id="Monitor"><a href="#Monitor" class="headerlink" title="Monitor"></a><strong>Monitor</strong></h3><p>A higher level synchronisation primitive.</p>
+<p>Programming language construct</p>
+<p><strong>IDEA:</strong></p>
+<p>A set of procedures&#x2F;variables&#x2F;data types are grouped in a special module:monitor.</p>
+<p>Variables and data types can only be accessed from <strong>within the monitor</strong>.</p>
+<p><strong>Only one process&#x2F;thread can be in the monitor at any one time.</strong></p>
+<p>Mutual exclusion is implemented by the complier.</p>
+<img src="/2023/04/26/3231note/14.png" class="" title="P44_lec03">
+<p>When a thread calls a monitor procedure that has a thread already inside, it will be in the entry queue and will sleep until the current thread exits the monitor.</p>
+<img src="/2023/04/26/3231note/15.png" class="" title="Monitor">
+<h3 id="Condition-Variable"><a href="#Condition-Variable" class="headerlink" title="Condition Variable"></a><strong>Condition Variable</strong></h3><p>To allow a process to wait within the monitor, we need to declare a condition variable.</p>
+<p>Condition variable can only be used with the operations <strong>wait</strong> and <strong>signal</strong>.</p>
+<p><strong>x.wait()</strong></p>
+<p>Means that the process invoking this operation is suspended until another process invokes.</p>
+<p>Another thread can enter the monitor while original is suspended.</p>
+<p><strong>x.signal()</strong></p>
+<p>this operation resumes <strong>only one</strong> suspended process.</p>
+<p>If no process is suspended, then this operation has no effect.</p>
+<img src="/2023/04/26/3231note/16.png" class="" title="P49_lec03">
+
+<p>How to achieve producer-consumer problem with monitors is in <strong>P50 lec03</strong>.</p>
+<h3 id="Synchronisation-Primitives-in-OS-x2F-161"><a href="#Synchronisation-Primitives-in-OS-x2F-161" class="headerlink" title="Synchronisation Primitives in OS&#x2F;161"></a><strong>Synchronisation Primitives in OS&#x2F;161</strong></h3><h4 id="Locks"><a href="#Locks" class="headerlink" title="Locks"></a><strong>Locks</strong></h4><img src="/2023/04/26/3231note/17.png" class="" title="P53_lec03">
+<h4 id="Semaphores-1"><a href="#Semaphores-1" class="headerlink" title="Semaphores"></a><strong>Semaphores</strong></h4><img src="/2023/04/26/3231note/18.png" class="" title="P55_lec03">
+
+<p><strong>Wait (P)</strong> &#x2F; <strong>signal (V)</strong></p>
+<h4 id="Condition-Variables"><a href="#Condition-Variables" class="headerlink" title="Condition Variables"></a><strong>Condition Variables</strong></h4><img src="/2023/04/26/3231note/19.png" class="" title="P56_lec03">
+
+<p>Note: All three variants must hold the lock passed in.</p>
+<h5 id="Condition-Variables-and-Bounded-Buffers"><a href="#Condition-Variables-and-Bounded-Buffers" class="headerlink" title="Condition Variables and Bounded Buffers"></a><strong>Condition Variables and Bounded Buffers</strong></h5><img src="/2023/04/26/3231note/20.png" class="" title="P57_lec03">
+
+<p>cv_wait() will release the lock before block the process</p>
+<h5 id="Producer-consumer-solution-with-condition-variable"><a href="#Producer-consumer-solution-with-condition-variable" class="headerlink" title="Producer-consumer solution with condition variable"></a><strong>Producer-consumer solution with condition variable</strong></h5><img src="/2023/04/26/3231note/21.png" class="" title="P58_lec03">
+
+<h3 id="Dining-Philosophers"><a href="#Dining-Philosophers" class="headerlink" title="Dining Philosophers"></a><strong>Dining Philosophers</strong></h3><p>哲学家就餐问题是一个经典的计算机科学同步问题，由Edsger Dijkstra在1965年提出。问题描述了五位哲学家围坐在圆桌旁的情景，他们在思考问题和吃饭之间交替。圆桌中间有一碗意面，每两位哲学家之间有一根筷子。每位哲学家需要两根筷子才能吃饭。哲学家们不能交谈，只能思考或吃饭。</p>
+<p>问题在于设计一个协议，使得每位哲学家都能够在需要时使用两根筷子吃饭，而不会出现死锁（即所有哲学家都在等待筷子，无法继续吃饭）或者饥饿（即某位哲学家长时间无法获得筷子）的情况。</p>
+<p>以下是一个可能的解决方案：</p>
+<p>我们可以为每根筷子分配一个编号（例如，1到5），并为每位哲学家分配一个编号。每位哲学家在需要吃饭时，先尝试拿起编号较低的筷子，然后尝试拿起编号较高的筷子。当哲学家同时拥有两根筷子时，他们可以开始吃饭。吃完饭后，他们将筷子放回原位，然后继续思考。</p>
+<p>这种方法可以避免死锁，因为至少有一位哲学家（具有最低编号筷子的哲学家）可以拿起两根筷子并开始吃饭。其他哲学家则需要等待筷子被放回。虽然这种方法可能导致某些哲学家等待时间较长，但可以确保所有哲学家都有机会吃饭，避免饥饿现象。</p>
+<h3 id="Reader-and-Writer-Problem"><a href="#Reader-and-Writer-Problem" class="headerlink" title="Reader and Writer Problem"></a><strong>Reader and Writer Problem</strong></h3><p>读者-写者问题是一个经典的计算机科学并发控制问题，用于描述多个进程在访问共享资源时需要进行同步的场景。在这个问题中，有一些读者进程和写者进程。读者进程只读取共享资源，而写者进程可以修改共享资源。问题的挑战在于设计一个同步协议，以允许多个读者进程同时访问共享资源，但在写者进程访问资源时，确保其他进程（读者和写者）无法访问资源。</p>
+<p>以下是一个可能的解决方案：</p>
+<p>我们可以使用互斥量（mutex）和信号量（semaphore）来实现这个协议。在这个解决方案中，我们需要一个互斥量来保护对共享资源的访问计数器，以及一个信号量来控制对共享资源的访问。</p>
+<p>读者进程：</p>
+<ol>
+<li>请求互斥量以修改访问计数器。</li>
+<li>将访问计数器加1。如果这是第一个读者进程，请求信号量以阻止写者进程访问共享资源。</li>
+<li>释放互斥量。</li>
+<li>访问共享资源。</li>
+<li>请求互斥量以修改访问计数器。</li>
+<li>将访问计数器减1。如果这是最后一个读者进程，释放信号量以允许写者进程访问共享资源。</li>
+<li>释放互斥量。</li>
+</ol>
+<p>写者进程：</p>
+<ol>
+<li>请求信号量以阻止其他进程访问共享资源。</li>
+<li>访问共享资源。</li>
+<li>释放信号量以允许其他进程访问共享资源。</li>
+</ol>
+<p>这个解决方案允许多个读者进程同时访问共享资源，但当有写者进程需要访问资源时，它们将等待所有当前的读者进程完成。同样，在写者进程访问共享资源时，其他读者和写者进程将被阻止。这种方法可以确保在写者进程访问资源时，没有其他进程可以访问共享资源。</p>
+<h2 id="Lec04-DeadLock"><a href="#Lec04-DeadLock" class="headerlink" title="Lec04 DeadLock"></a>Lec04 DeadLock</h2><h3 id="DeadLock-amp-Resources"><a href="#DeadLock-amp-Resources" class="headerlink" title="DeadLock &amp; Resources"></a><strong>DeadLock &amp; Resources</strong></h3><p>Deadlocks occurs when</p>
+<ol>
+<li>Processes are granted exclusive access to devices&#x2F;locks&#x2F;tables..</li>
+<li>We refer to these entities generally as resources.</li>
+</ol>
+<p>Deadlock: definition</p>
+<p><strong>A set of processes is deadlocked if each process in the set is waiting for an event that only another process in the set can cause.</strong></p>
+<p>In the deadlock situation, no process can</p>
+<ol>
+<li>Run</li>
+<li>Release resources</li>
+<li>Be awakened</li>
+</ol>
+<h3 id="Four-conditions-for-deadlock"><a href="#Four-conditions-for-deadlock" class="headerlink" title="Four conditions for deadlock"></a><strong>Four conditions for deadlock</strong></h3><ol>
+<li>Mutual exclusion condition<ol>
+<li>Each resource assigned to 1 process or is available</li>
+</ol>
+</li>
+<li>Hold and wait condition<ol>
+<li>Process holding resources can request additional</li>
+</ol>
+</li>
+<li>No preemption condition<ol>
+<li>Previously granted resources cannot be forcibly taken away</li>
+</ol>
+</li>
+<li>Circular wait	condition<ol>
+<li>Must be a circular chain of 2 or more processes</li>
+<li>Each is waiting for resource held by next member of the chain</li>
+</ol>
+</li>
+</ol>
+<h3 id="Deadlock-avoidance"><a href="#Deadlock-avoidance" class="headerlink" title="Deadlock avoidance"></a><strong>Deadlock avoidance</strong></h3><ol>
+<li>Just ignore the problem altogether</li>
+<li>Prevention 预防<ol>
+<li>Negating on of the four necessary conditions</li>
+</ol>
+</li>
+<li>Detection and recovery</li>
+<li>Dynamic avoidance<ol>
+<li>Careful resource allocation</li>
+</ol>
+</li>
+</ol>
+<h4 id="Method-1-Ostrich-Algorithm"><a href="#Method-1-Ostrich-Algorithm" class="headerlink" title="Method 1: Ostrich Algorithm"></a><strong>Method 1: Ostrich Algorithm</strong></h4><p>Pretend there is no problem</p>
+<p>Reasonable if</p>
+<ol>
+<li>Deadlocks occur very rarely</li>
+<li>Cost of prevention is high</li>
+</ol>
+<p>UNIX and Windows takes this approach for some of the more complex resource relationships they manage</p>
+<p>It’s a trade off between</p>
+<ol>
+<li>Convenience (engineering approach)</li>
+<li>Correctness (mathematical approach)</li>
+</ol>
+<h4 id="Method-2-Deadlock-prevention"><a href="#Method-2-Deadlock-prevention" class="headerlink" title="Method 2: Deadlock prevention"></a><strong>Method 2: Deadlock prevention</strong></h4><p>Resource allocation rules prevent deadlock by prevent one of the four conditions required for deadlock from occurring:</p>
+<ol>
+<li>Mutual exclusion</li>
+<li>Hold and wait</li>
+<li>No preemption</li>
+<li>Circular Wait</li>
+</ol>
+<h5 id="Attacking-the-Mutual-Exclusion-Condition-Not-feasible"><a href="#Attacking-the-Mutual-Exclusion-Condition-Not-feasible" class="headerlink" title="Attacking the Mutual Exclusion Condition (Not feasible)"></a><strong>Attacking the Mutual Exclusion Condition (Not feasible)</strong></h5><p>Not feasible in general</p>
+<p>Some devices&#x2F;resources are intrinsically(本质上) not sharable.</p>
+<h5 id="Attacking-the-hold-and-wait-condition-request-resources-initially"><a href="#Attacking-the-hold-and-wait-condition-request-resources-initially" class="headerlink" title="Attacking the hold and wait condition (request resources initially)"></a><strong>Attacking the hold and wait condition (request resources initially)</strong></h5><p>Require processes to <strong>request resources before starting</strong></p>
+<p>A process never has to wait for what it needs</p>
+<p><strong>Issues</strong>:</p>
+<ol>
+<li>May not know required resources at start of run</li>
+</ol>
+<p>Which means not always possible</p>
+<ol>
+<li>Also ties up resources other processes could be using</li>
+</ol>
+<p><strong>Variations:</strong></p>
+<ol>
+<li>Process must give up all resources if it would block holding a resource</li>
+<li>Then request all immediately need</li>
+<li>Prone(倾向于) to livelock</li>
+</ol>
+<h5 id="Attacking-the-No-Preemption-condition-无优先权条件-take-resources-away"><a href="#Attacking-the-No-Preemption-condition-无优先权条件-take-resources-away" class="headerlink" title="Attacking the No Preemption condition(无优先权条件)(take resources away)"></a><strong>Attacking the No Preemption condition(无优先权条件)(take resources away)</strong></h5><p><strong>Not a viable option</strong></p>
+<h5 id="Attacking-the-circular-wait-condition-Order-resources"><a href="#Attacking-the-circular-wait-condition-Order-resources" class="headerlink" title="Attacking the circular wait condition (Order resources)"></a><strong>Attacking the circular wait condition (Order resources)</strong></h5><p><strong><em>Numerically ordered resources</em> (Resources ordering is a common technique)</strong></p>
+<h4 id="Method-3-Detection-and-recovery"><a href="#Method-3-Detection-and-recovery" class="headerlink" title="Method 3: Detection and recovery"></a><strong>Method 3: Detection and recovery</strong></h4><p>Need a method to determine if a system is deadlocked.</p>
+<p>Assuming deadlocked is detected, we need a method of recovery to restore progress to the system.</p>
+<h5 id="Strategy"><a href="#Strategy" class="headerlink" title="Strategy:"></a><strong>Strategy:</strong></h5><p>Note the resource ownership and requests</p>
+<p>A cycle can be found within the graph, which denotes a deadlock</p>
+<h5 id="Detection-with-Multiple-Resources-of-Each-Type"><a href="#Detection-with-Multiple-Resources-of-Each-Type" class="headerlink" title="Detection with Multiple Resources of Each Type"></a><strong>Detection with Multiple Resources of Each Type</strong></h5><img src="/2023/04/26/3231note/22.png" class="" title="P28_lec04">
+
+<p><strong>Sum of current resource allocation + resources available &#x3D; resources that exist</strong></p>
+<img src="/2023/04/26/3231note/23.png" class="" title="Detection">
+<h6 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm"></a>Algorithm</h6><ol>
+<li>Look for an unmarked process <strong>Pi</strong>, for which the i-th row of R is less than or equal to A.</li>
+<li>If found, add the i-th row of <strong>C</strong> to <strong>A</strong>, and mark <strong>Pi</strong>, then go back to step 1.</li>
+<li>If no such process exists, terminate.</li>
+</ol>
+<p><strong>The remaining processes are deadlocked.</strong></p>
+<h5 id="Recovery-from-Deadlock"><a href="#Recovery-from-Deadlock" class="headerlink" title="Recovery from Deadlock"></a><strong>Recovery from Deadlock</strong></h5><p><strong>Recovery through preemption</strong></p>
+<p>• take a resource from some other process</p>
+<p>• depends on nature of the resource</p>
+<p><strong>Recovery through rollback</strong></p>
+<p>• checkpoint a process periodically</p>
+<p>• use this saved state </p>
+<p>• restart the process if it is found deadlocked</p>
+<p>• No guarantee is won’t deadlock again</p>
+<p><strong>Recovery through killing processes</strong></p>
+<p>• crudest but simplest way to break a deadlock</p>
+<p>• kill one of the processes in the deadlock cycle</p>
+<p>• the other processes get its resources </p>
+<p>• choose process that can be rerun from the beginning</p>
+<h4 id="Method-4-Deadlock-Avoidance"><a href="#Method-4-Deadlock-Avoidance" class="headerlink" title="Method 4: Deadlock Avoidance"></a><strong>Method 4: Deadlock Avoidance</strong></h4><p>Only enough information is available in advance, we can avoid a deadlock.</p>
+<ol>
+<li>Maximum number of each resource required</li>
+</ol>
+<img src="/2023/04/26/3231note/24.png" class="" title="P47_lec04">
+
+<h5 id="Safe-and-Unsafe-states"><a href="#Safe-and-Unsafe-states" class="headerlink" title="Safe and Unsafe states"></a><strong>Safe and Unsafe states</strong></h5><p><strong>A state is safe if</strong></p>
+<p>• The system is not deadlocked</p>
+<p>• There exists a scheduling order that results in every process running </p>
+<p>to completion, even if they all request their maximum resources </p>
+<p>immediately</p>
+<p><strong>Unsafe states are not necessarily deadlocked</strong></p>
+<p>• With a lucky sequence, all processes may complete </p>
+<p>• However, we <strong>cannot guarantee</strong> that they will complete </p>
+<p>(not deadlock)</p>
+<p>• <strong>Safe states guarantee we will eventually complete all processes</strong></p>
+<p>•Deadlock avoidance algorithm</p>
+<p>• Only grant requests that result in safe states</p>
+<h3 id="LiveLock"><a href="#LiveLock" class="headerlink" title="LiveLock"></a><strong>LiveLock</strong></h3><p>Livelocked processes are not blocked, change state regularly, but never make progress</p>
+<img src="/2023/04/26/3231note/25.png" class="" title="P19_lec04">
+<h3 id="Bankers-Algorithm"><a href="#Bankers-Algorithm" class="headerlink" title="Bankers Algorithm"></a><strong>Bankers Algorithm</strong></h3><p>Modelled on a Banker with Customers</p>
+<p>• The banker has a limited amount of money to loan customers</p>
+<p>• Limited number of resources</p>
+<p>• Each customer can borrow money up to the customer’s credit limit</p>
+<p>• Maximum number of resources required</p>
+<p>Basic Idea</p>
+<p>• Keep the bank in a safe state </p>
+<p>• So all customers are happy even if they all request to borrow up to their </p>
+<p>credit limit at the same time.</p>
+<p>• Customers wishing to borrow such that the bank would enter an unsafe state must wait until somebody else repays their loan such that the the </p>
+<p>transaction becomes safe</p>
+<h3 id="Starvation"><a href="#Starvation" class="headerlink" title="Starvation"></a><strong>Starvation</strong></h3><p>A process never receives the resource it is waiting for, despite the resource (repeatedly) becoming free, the resource is always allocated to another waiting process</p>
+<p><strong>One Solution: First come, first server</strong></p>
+<h2 id="Lec05-Processes-and-Threads-Implementation"><a href="#Lec05-Processes-and-Threads-Implementation" class="headerlink" title="Lec05 Processes and Threads Implementation"></a>Lec05 Processes and Threads Implementation</h2><h3 id="MIPS-Registers"><a href="#MIPS-Registers" class="headerlink" title="MIPS Registers"></a><strong>MIPS Registers</strong></h3><p>User-mode accessible registers</p>
+<p>• 32 general purpose registers</p>
+<p>• r0 hardwired to zero</p>
+<p>• r31 the link register for jump-and-link </p>
+<p>(JAL) instruction</p>
+<p>HI&#x2F;LO </p>
+<p>• 2 * 32-bits for multiply and divide</p>
+<p>PC </p>
+<p>• Not directly visible</p>
+<p>• Modified implicitly by jump and branch instructions</p>
+<h3 id="Branching-and-Jumping"><a href="#Branching-and-Jumping" class="headerlink" title="Branching and Jumping"></a><strong>Branching and Jumping</strong></h3><p>Branching and jumping have a branch delay slot</p>
+<p>• <strong>The instruction following a branch or jump is always executed prior to destination of jump</strong></p>
+<h3 id="Process"><a href="#Process" class="headerlink" title="Process"></a><strong>Process</strong></h3><h4 id="Memory-allocation"><a href="#Memory-allocation" class="headerlink" title="Memory allocation"></a><strong>Memory allocation</strong></h4><p>Minimally consist of three segments</p>
+<p>• Text</p>
+<p>• contains the code (instructions)</p>
+<p>• Data</p>
+<p>• Global variables</p>
+<p>• Stack</p>
+<p>• Activation records of procedure&#x2F;function&#x2F;method</p>
+<p>• Local variables </p>
+<p>Note:</p>
+<p>• data can dynamically grow up</p>
+<p>• E.g., malloc()-ing</p>
+<p>• The stack can dynamically grow down</p>
+<p>• E.g., increasing function call depth or recursion</p>
+<img src="/2023/04/26/3231note/26.png" class="" title="P23_lec05"> P23 lec05
+
+<h4 id="Mode-distinguish"><a href="#Mode-distinguish" class="headerlink" title="Mode distinguish"></a><strong>Mode distinguish</strong></h4><p><strong>User-mode</strong></p>
+<p>• Processes (programs) scheduled by the kernel</p>
+<p>• Isolated from each other</p>
+<p>• <strong>No concurrency issues between each other</strong></p>
+<p><strong>System-calls transition into and return from the kernel</strong></p>
+<p><strong>Kernel-mode</strong></p>
+<p>• Nearly all activities still associated with a process</p>
+<p>• Kernel memory shared between all processes</p>
+<p>• Concurrency issues exist between processes concurrently executing in a system call</p>
+<h3 id="User-level-Threads"><a href="#User-level-Threads" class="headerlink" title="User-level Threads"></a><strong>User-level Threads</strong></h3><img src="/2023/04/26/3231note/27.png" class="" title="P32_lec05">
+
+<p><strong>Implementation at user-level</strong></p>
+<p>• User-level Thread Control Block (TCB), ready queue, blocked queue, and dispatcher</p>
+<p>• Kernel has no knowledge of the threads (it only sees a single process)</p>
+<p>• If a thread blocks waiting for a resource held by another thread inside </p>
+<p>the same process, its state is saved and the dispatcher switches to another ready thread</p>
+<p>• Thread management (create, exit, yield, wait) are implemented in a runtime support library</p>
+<h4 id="Pros"><a href="#Pros" class="headerlink" title="Pros"></a><strong>Pros</strong></h4><p>• Thread management and switching <strong>at user level is much faster than doing it in kernel level</strong></p>
+<p>• No need to trap (take syscall exception) into kernel and back to switch</p>
+<p>• Dispatcher algorithm can be tuned to the application</p>
+<p>• E.g. use priorities</p>
+<p>• Can be implemented on any OS (thread or non-thread aware)</p>
+<p>• Can easily support massive numbers of threads on a per-application </p>
+<p>basis</p>
+<p>• Use normal application virtual memory</p>
+<p>• Kernel memory more constrained. Difficult to efficiently support wildly differing numbers of threads for different applications</p>
+<h4 id="Cons"><a href="#Cons" class="headerlink" title="Cons"></a><strong>Cons</strong></h4><p>• Threads have to yield() manually (<strong>no timer interrupt delivery to user level</strong>)</p>
+<p>• <strong>Co-operative multithreading</strong></p>
+<p>• A single poorly design&#x2F;implemented thread can monopolise the available CPU time</p>
+<p>• There are work-arounds (e.g. a timer signal per second to enable pre-emptive multithreading), they are course grain and a kludge.</p>
+<p>• Does not take advantage of multiple CPUs (in reality, we still have a single threaded process as far as the kernel is concerned)</p>
+<p>• If a thread makes a blocking system call (or takes a page fault), the process (and all the internal threads) blocks</p>
+<p>• Can’t overlap I&#x2F;O with computation</p>
+<h3 id="Kernel-provided-Threads"><a href="#Kernel-provided-Threads" class="headerlink" title="Kernel-provided Threads"></a><strong>Kernel-provided Threads</strong></h3><img src="/2023/04/26/3231note/28.png" class="" title="P38_lec05">P38 lec05
+
+<p><strong>Threads are implemented by the kernel</strong></p>
+<p>• TCBs (thread control block) are stored in the kernel</p>
+<p>• A subset of information in a traditional PCB (process control block)</p>
+<p>• The subset related to execution context</p>
+<p>• TCBs have a PCB associated with them</p>
+<p>• Resources associated with the group of threads (the process)</p>
+<p>• Thread management calls are implemented as system calls</p>
+<p>• E.g. create, wait, exit</p>
+<h4 id="Cons-1"><a href="#Cons-1" class="headerlink" title="Cons"></a><strong>Cons</strong></h4><p>• Thread creation and destruction, and blocking and unblocking threads requires kernel entry and exit.</p>
+<p>• More expensive than user-level equivalent</p>
+<h4 id="Pros-1"><a href="#Pros-1" class="headerlink" title="Pros"></a><strong>Pros</strong></h4><p>• Preemptive multithreading</p>
+<p>• Parallelism</p>
+<p>• Can overlap blocking I&#x2F;O with computation</p>
+<p>• <strong>Can take advantage of a multiprocessor</strong></p>
+<h3 id="Context-Switch"><a href="#Context-Switch" class="headerlink" title="Context Switch"></a><strong>Context Switch</strong></h3><p><strong>Context Switch is what the lowest level of OS does when an interrupt occurs.</strong></p>
+<p>A context switch can refer to</p>
+<p>• A switch between threads</p>
+<p>• Involving saving and restoring of state associated with a thread</p>
+<p>• A switch between processes</p>
+<p>• Involving the above, plus extra state associated with a process. </p>
+<p>• E.g. memory maps</p>
+<h4 id="Context-Switch-Occurrence"><a href="#Context-Switch-Occurrence" class="headerlink" title="Context Switch Occurrence"></a><strong>Context Switch Occurrence</strong></h4><p>A switch between process&#x2F;threads can happen any time the OS is invoked</p>
+<p>• On a system call</p>
+<p>• Mandatory if system call blocks or on exit();</p>
+<p>• On an exception</p>
+<p>• Mandatory if offender is killed</p>
+<p>• On an interrupt</p>
+<p>• Triggering a dispatch is the main purpose of the timer interrupt</p>
+<p><strong>A thread switch can happen between any two instructions</strong></p>
+<p>Note <strong>instructions do not equal program statements</strong></p>
+<h3 id="Context-Switch-Addition"><a href="#Context-Switch-Addition" class="headerlink" title="Context Switch Addition"></a><strong>Context Switch Addition</strong></h3><ul>
+<li>Context switch must be transparent for processes&#x2F;threads</li>
+</ul>
+<p>• When dispatched again, process&#x2F;thread should not notice that something else was running in the meantime (except for elapsed time)</p>
+<ol>
+<li>OS must save all state that affects the thread</li>
+</ol>
+<p>• This state is called the process&#x2F;thread context</p>
+<p>• Switching between process&#x2F;threads consequently </p>
+<p>results in a context switch.</p>
+</div>
+        </div>
+        
+            <div class="kratos-copyright text-center clearfix">
+                <h5 itemprop="copyrightNotice">本作品采用 <a rel="license nofollow" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">知识共享署名-相同方式共享 4.0 国际许可协议</a> 进行许可</h5>
+            </div>
+        
+        <footer class="kratos-entry-footer clearfix">
+            
+                <div class="post-like-donate text-center clearfix" id="post-like-donate">
+                
+                
+                    <a class="share" href="javascript:;"><i class="fa fa-share-alt"></i> 分享</a>
+                    <div class="share-wrap" style="display: none;">
+    <div class="share-group">
+        <a href="javascript:;" class="share-plain qq" onclick="share('qq');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-qq"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain qzone" onclick="share('qzone');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-star"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain weixin pop style-plain" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-weixin"></i>
+            </div>
+            <div class="share-int">
+                <div class="qrcode" id="wechat-qr"></div>
+                <p>打开微信“扫一扫”，打开网页后点击屏幕右上角分享按钮</p>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain weibo" onclick="share('weibo');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-weibo"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain facebook style-plain" onclick="share('facebook');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-facebook"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain twitter style-plain" onclick="share('twitter');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-twitter"></i>
+            </div>
+        </a>
+    </div>
+    <script type="text/javascript">
+        $(()=>{
+            new QRCode("wechat-qr", {
+                text: "https://xhmkggybzwmz.github.io/2023/04/26/3231note/",
+                width: 150,
+                height: 150,
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        });
+        function share(dest) {
+            const qqBase        = "https://connect.qq.com/widget/shareqq/index.html?";
+            const weiboBase     = "https://service.weibo.com/share/share.php?";
+            const qzoneBase     = "https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?";
+            const facebookBase  = "https://www.facebook.com/sharer/sharer.php?";
+            const twitterBase   = "https://twitter.com/intent/tweet?";
+            const hostUrl       = "https://xhmkggybzwmz.github.io/2023/04/26/3231note/";
+            const title         = "「3231note」";
+            const excerpt       = `UNSW COMP3231 23T1 notes`;
+            let _URL;
+            switch (dest) {
+                case "qq"       : _URL = qqBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";     break;
+                case "weibo"    : _URL = weiboBase+"url="+hostUrl+"&title="+title+excerpt;                                 break;
+                case "qzone"    : _URL = qzoneBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";  break;
+                case "facebook" : _URL = facebookBase+"u="+hostUrl;                                                        break;
+                case "twitter"  : _URL = twitterBase+"text="+title+excerpt+"&url="+hostUrl;                                break;
+            }
+            window.open(_URL);
+        };
+    </script>
+</div>
+                
+                </div>
+            
+            <div class="footer-tag clearfix">
+                <div class="pull-left">
+                <i class="fa fa-tags"></i>
+                    <a class="tag-none-link" href="/tags/COMP3231/" rel="tag">COMP3231</a>
+                </div>
+                <div class="pull-date">
+                    <time datetime="2023-04-25T15:01:30.380Z" itemprop="dateModified">最后编辑：2023-04-26</time>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+        <nav class="navigation post-navigation clearfix" role="navigation">
+            
+            <div class="nav-previous clearfix">
+                <a title=" test for categories" href="/2023/03/21/test-for-cat/">&lt; 上一篇</a>
+            </div>
+            
+            
+        </nav>
+    
+    
+        <link rel="stylesheet" href="/vendors/gitalk@1.7.2/dist/gitalk.css"></script>
+<div id="gitalk-container" class="post-comments lazy-load" style="padding-left:2rem; padding-right:2rem;"></div>
+<script>
+    var load_comm = () => {
+        const init = () => {
+            console.log('Gitalk loading...');
+            const gitalk = new Gitalk(Object.assign({
+                id: '/2023/04/26/3231note/',
+                path: '/2023/04/26/3231note/'
+            }, JSON.parse('{"clientID":"5f6c1e1e029fb52b7652","clientSecret":"48ba85488eff7bb997fd77d4ffb2c741c86e09ab","repo":"blog_comments","owner":"xhmkggybzwmz","admin":["xhmkggybzwmz"],"distractionFreeMode":false}')));
+
+            gitalk.render('gitalk-container');
+        }
+        if (typeof Gitalk === 'undefined') {
+            const src = '/vendors/gitalk@1.7.2/dist/gitalk.min.js';
+            $.getScript(src, init);
+        } else {
+            init();
+        }
+    };
+</script>
+<noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://github.com/gitalk/gitalk">comments powered by Gitalk.</a></noscript>
+    
+</article>
+
+        
+
+            </section>
+
+        
+
+                
+            
+
+<section id="kratos-widget-area" class="col-md-4 hidden-xs hidden-sm">
+    <!-- 文章和页面根据splitter来分割，没有的话就从头开始设置为sticky -->
+    
+    
+                <aside id="krw-about" class="widget widget-kratos-about clearfix">
+    <div class="photo-background"></div>
+    <div class="photo-wrapper clearfix">
+        <div class="photo-wrapper-tip text-center">
+            <img class="about-photo" src="/images/bornya_avatar.webp" loading="lazy" decoding="auto" />
+        </div>
+    </div>
+    <div class="textwidget">
+        <p class="text-center"></p>
+    </div>
+    <div class="site-meta">
+        <a class="meta-item" href="/archives/">
+            <span class="title">
+                文章
+            </span>
+            <span class="count">
+                3
+            </span>
+        </a>
+        <a class="meta-item" href="/categories/">
+            <span class="title">
+                分类
+            </span>
+            <span class="count">
+                2
+            </span>
+        </a>
+        <a class="meta-item" href="/tags/">
+            <span class="title">
+                标签
+            </span>
+            <span class="count">
+                2
+            </span>
+        </a>
+    </div>
+</aside>
+            
+                    <div class="sticky-area">
+                
+                    <aside id="krw-toc" class="widget widget-kratos-toc clearfix toc-div-class" >
+    <div class="photo-background"></div>
+    <h4 class="widget-title no-after">
+        <i class="fa fa-compass"></i>
+        文章目录
+        <span class="toc-progress-bar" role="progressbar" aria-label="阅读进度："></span>
+    </h4>
+    <div class="textwidget">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Lec-02-Processes-and-Threads"><span class="toc-text">Lec 02 Processes and Threads</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Processes"><span class="toc-text">Processes:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Threads"><span class="toc-text">Threads:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Process-Termination"><span class="toc-text">Process Termination</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Process-and-Thread-States"><span class="toc-text">Process and Thread States</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Running-%E2%86%92-Ready"><span class="toc-text">Running → Ready</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Running-%E2%86%92-Blocked"><span class="toc-text">Running → Blocked</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Schedular"><span class="toc-text">Schedular</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Thread-Model"><span class="toc-text">Thread Model</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Thread-Usage"><span class="toc-text">Thread Usage</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Summary-in-Threads"><span class="toc-text">Summary in Threads</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lec-03-Concurrency-and-Synchronisation"><span class="toc-text">Lec 03 Concurrency and Synchronisation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Concurrency-Example"><span class="toc-text">Concurrency Example:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Critical-Region-and-how-to-identify"><span class="toc-text">Critical Region and how to identify</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Critical-Regions-Solutions"><span class="toc-text">Critical Regions Solutions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mutual-exclusion-by-taking-turns"><span class="toc-text">Mutual exclusion by taking turns</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mutual-Exclusion-by-disabling-interrupts"><span class="toc-text">Mutual Exclusion by disabling interrupts</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hardware-Support-for-mutual-exclusion"><span class="toc-text">Hardware Support for mutual exclusion</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tackling-the-busy-wait-problem"><span class="toc-text">Tackling the busy-wait problem:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Producer-Consumer-Problem-bounded-buffer-problem"><span class="toc-text">Producer-Consumer Problem(bounded buffer problem)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Issues"><span class="toc-text">Issues:</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Semaphores"><span class="toc-text">Semaphores</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Producer-Consumer-problem-with-semaphores"><span class="toc-text">Producer Consumer problem with semaphores:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Summarising-Semaphores"><span class="toc-text">Summarising Semaphores</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Monitor"><span class="toc-text">Monitor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Condition-Variable"><span class="toc-text">Condition Variable</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Synchronisation-Primitives-in-OS-x2F-161"><span class="toc-text">Synchronisation Primitives in OS&#x2F;161</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Locks"><span class="toc-text">Locks</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Semaphores-1"><span class="toc-text">Semaphores</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Condition-Variables"><span class="toc-text">Condition Variables</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Condition-Variables-and-Bounded-Buffers"><span class="toc-text">Condition Variables and Bounded Buffers</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Producer-consumer-solution-with-condition-variable"><span class="toc-text">Producer-consumer solution with condition variable</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dining-Philosophers"><span class="toc-text">Dining Philosophers</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reader-and-Writer-Problem"><span class="toc-text">Reader and Writer Problem</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lec04-DeadLock"><span class="toc-text">Lec04 DeadLock</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DeadLock-amp-Resources"><span class="toc-text">DeadLock &amp; Resources</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Four-conditions-for-deadlock"><span class="toc-text">Four conditions for deadlock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deadlock-avoidance"><span class="toc-text">Deadlock avoidance</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Method-1-Ostrich-Algorithm"><span class="toc-text">Method 1: Ostrich Algorithm</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Method-2-Deadlock-prevention"><span class="toc-text">Method 2: Deadlock prevention</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Attacking-the-Mutual-Exclusion-Condition-Not-feasible"><span class="toc-text">Attacking the Mutual Exclusion Condition (Not feasible)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Attacking-the-hold-and-wait-condition-request-resources-initially"><span class="toc-text">Attacking the hold and wait condition (request resources initially)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Attacking-the-No-Preemption-condition-%E6%97%A0%E4%BC%98%E5%85%88%E6%9D%83%E6%9D%A1%E4%BB%B6-take-resources-away"><span class="toc-text">Attacking the No Preemption condition(无优先权条件)(take resources away)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Attacking-the-circular-wait-condition-Order-resources"><span class="toc-text">Attacking the circular wait condition (Order resources)</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Method-3-Detection-and-recovery"><span class="toc-text">Method 3: Detection and recovery</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Strategy"><span class="toc-text">Strategy:</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Detection-with-Multiple-Resources-of-Each-Type"><span class="toc-text">Detection with Multiple Resources of Each Type</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#Algorithm"><span class="toc-text">Algorithm</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Recovery-from-Deadlock"><span class="toc-text">Recovery from Deadlock</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Method-4-Deadlock-Avoidance"><span class="toc-text">Method 4: Deadlock Avoidance</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Safe-and-Unsafe-states"><span class="toc-text">Safe and Unsafe states</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LiveLock"><span class="toc-text">LiveLock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Bankers-Algorithm"><span class="toc-text">Bankers Algorithm</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Starvation"><span class="toc-text">Starvation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lec05-Processes-and-Threads-Implementation"><span class="toc-text">Lec05 Processes and Threads Implementation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MIPS-Registers"><span class="toc-text">MIPS Registers</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Branching-and-Jumping"><span class="toc-text">Branching and Jumping</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Process"><span class="toc-text">Process</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Memory-allocation"><span class="toc-text">Memory allocation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mode-distinguish"><span class="toc-text">Mode distinguish</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#User-level-Threads"><span class="toc-text">User-level Threads</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Pros"><span class="toc-text">Pros</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Cons"><span class="toc-text">Cons</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Kernel-provided-Threads"><span class="toc-text">Kernel-provided Threads</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Cons-1"><span class="toc-text">Cons</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Pros-1"><span class="toc-text">Pros</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Context-Switch"><span class="toc-text">Context Switch</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Context-Switch-Occurrence"><span class="toc-text">Context Switch Occurrence</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Context-Switch-Addition"><span class="toc-text">Context Switch Addition</span></a></li></ol></li></ol>
+    </div>
+</aside>
+                
+                
+  <aside id="krw-categories" class="widget widget-kratos-categories clearfix">
+    <h4 class="widget-title"><i class="fa fa-folder"></i>分类目录</h4>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Demo/">Demo</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/notes/">notes</a><span class="category-list-count">1</span></li></ul>
+  </aside>
+
+
+            
+                
+  <aside id="krw-tags" class="widget widget-kratos-tags clearfix">
+    <h4 class="widget-title"><i class="fa fa-tags"></i>标签聚合</h4>
+      <div class="tag-clouds">
+        <a href="/tags/COMP3231/" style="font-size: 0.6em;">COMP3231</a> <a href="/tags/test/" style="font-size: 0.6em;">test</a>
+      </div>
+  </aside>
+
+            
+                
+  <aside id="krw-posts" class="widget widget-kratos-posts">
+  <h4 class="widget-title"><i class="fa fa-file"></i>最新文章</h4>
+  <div class="tab-content">
+      <ul class="list-group">
+        
+        
+          
+          
+            <a class="list-group-item" href="/2023/04/26/3231note/"><i class="fa  fa-book"></i> 3231note</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2023/03/21/test-for-cat/"><i class="fa  fa-book"></i> test for categories</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/2023/03/20/hello-world/"><i class="fa  fa-book"></i> hello-world</a>
+            
+          
+        
+      </ul>
+  </div>
+  </aside>
+
+            
+    </div>
+</section>
+        
+        </div>
+    </div>
+</div>
+<footer>
+    <div id="footer"  class="ap-lrc"  >
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 footer-list text-center">
+                    <ul class="kratos-social-icons">
+                        <!-- Keep for compatibility -->
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <li><a target="_blank" rel="nofollow" href="https://github.com/xhmkggybzwmz"><i class="fa fa-github"></i></a></li>
+                        
+                        <!-- New links -->
+                        
+                    </ul>
+                    <ul class="kratos-copyright">
+                        <div>
+                            <li>&copy; 2023 INAB 版权所有.</li>
+                            <li>本站已运行<span id="span_dt">Loading...</span></li>
+                        </div>
+                        <div>
+                            <li>Theme <a href="https://github.com/Candinya/Kratos-Rebirth" target="_blank">Kratos:Rebirth</a></li>
+                            <li>Site built with&nbsp;<i class="fa fa-heart throb" style="color:#d43f57"></i>&nbsp;by Xhmkggybz.</li>
+                        </div>
+                        <div>
+                            <li>Powered by <a href="https://hexo.io" target="_blank" rel="nofollow">Hexo</a></li>
+                            <li>Hosted on <a href="https://github.io" target="_blank">Github Pages</a></li>
+                        </div>
+                        <div>
+                            
+                            
+                        </div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="kr-tool text-center">
+            <div class="tool">
+                
+                    <div class="box search-box">
+                        <a href="/search/">
+                            <span class="fa fa-search"></span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="box theme-box" id="darkmode-switch">
+                        <span class="fa fa-adjust"></span>
+                    </div>
+                
+                
+                
+            </div>
+            <div class="box gotop-box">
+                <span class="fa fa-chevron-up"></span>
+            </div>
+        </div>
+    </div>
+</footer>
+</div>
+</div>
+
+        <script defer src="/vendors/bootstrap@3.3.4/dist/js/bootstrap.min.js"></script>
+<script defer src="/vendors/nprogress@0.2.0/nprogress.js"></script>
+<script>
+    if (!window.kr) {
+        window.kr = {};
+    }
+    window.kr.notMobile = (!(navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)));
+    window.kr.siteRoot = "/";
+</script>
+
+
+    <script async src="/js/candy.min.js"></script>
+
+
+
+    <script defer src="/vendors/aplayer@1.10.1/dist/APlayer.min.js"></script>
+    
+    <script defer src="/vendors/meting@2.0.1/dist/Meting.min.js"></script>
+    <meting-js
+        server="netease"
+        type="playlist"
+        id="708801848"
+        order="random"
+        fixed="true"
+    >
+    </meting-js>
+
+
+
+    <script defer src="/vendors/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+<script defer src="/js/kratosr.min.js"></script>
+<script defer src="/js/pjax.min.js"></script>
+
+
+
+<!-- Extra support for third-party plguins  -->
+
+
+    </body>
+</html>
