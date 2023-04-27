@@ -26,7 +26,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="https://xhmkggybzwmz.github.io/2023/04/26/3231note/cover.png">
 <meta property="article:published_time" content="2023-04-25T14:32:58.000Z">
-<meta property="article:modified_time" content="2023-04-26T14:53:02.840Z">
+<meta property="article:modified_time" content="2023-04-27T15:08:57.448Z">
 <meta property="article:author" content="Xhmkggybz">
 <meta property="article:tag" content="COMP3231">
 <meta name="twitter:card" content="summary">
@@ -223,7 +223,7 @@
                         <i class="fa fa-edit"></i> 
                         
                         
-                            ~41.33K
+                            ~75.66K
                         
                         字
                     </li>
@@ -235,7 +235,7 @@
             
             <div id="expire-alert" class="alert alert-warning hidden" role="alert">
                 <div class="icon"><i class="fa fa-warning"></i></div>
-                <div class="text"><p>本文最后编辑于 <time datetime="1682520782840"></time> 前，其中的内容可能需要更新。</p></div>
+                <div class="text"><p>本文最后编辑于 <time datetime="1682608137448"></time> 前，其中的内容可能需要更新。</p></div>
             </div>
             
             
@@ -1345,7 +1345,781 @@
 <li>Users were constantly resetting (or crashing) their machines</li>
 </ol>
 <p>This method is still be used in USB storage.</p>
-<h2 id="NOT-FINISHED-YET"><a href="#NOT-FINISHED-YET" class="headerlink" title="NOT FINISHED YET"></a><strong>NOT FINISHED YET</strong></h2></div>
+<h2 id="Lec11-ext2-FS"><a href="#Lec11-ext2-FS" class="headerlink" title="Lec11 ext2 FS"></a>Lec11 ext2 FS</h2><h3 id="Descriptions"><a href="#Descriptions" class="headerlink" title="Descriptions:"></a><strong>Descriptions:</strong></h3><p>• Second Extended Filesystem</p>
+<p>– The main Linux FS before ext3</p>
+<p>– Evolved from Minix filesystem (via “Extended Filesystem”)</p>
+<p>• Features</p>
+<p>– Block size (1024, 2048, and 4096) configured at FS creation</p>
+<p>– <strong>inode-based FS</strong></p>
+<p>– Performance optimisations to improve locality (from BSD FFS)</p>
+<p>• Main Problem: <strong>unclean unmount</strong> -&gt; e2fsck</p>
+<p>– Ext3fs keeps a journal of (meta-data) updates</p>
+<p>– Journal is a file where updates are logged</p>
+<p>– Compatible with ext2fs</p>
+<h3 id="i-node"><a href="#i-node" class="headerlink" title="i-node"></a><strong>i-node</strong></h3><p>• Each file is represented by an inode on disk</p>
+<p>• Inode <strong>contains the fundamental file metadata</strong></p>
+<p>– Access rights, owner, accounting info</p>
+<p>– (partial) block index table of a file</p>
+<p>• <strong>Each inode has a unique number</strong></p>
+<p>– System oriented name</p>
+<p>• Directories map file names to inode numbers</p>
+<p>– Map human-oriented to system-oriented names</p>
+<h4 id="Inode-contents"><a href="#Inode-contents" class="headerlink" title="Inode contents"></a><strong>Inode contents</strong></h4><ol>
+<li>Mode<ol>
+<li>Type<ol>
+<li>Regular file or directory</li>
+</ol>
+</li>
+<li>Access mode<ol>
+<li>Rwxrwxrwx</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>Uid<ol>
+<li>User ID</li>
+</ol>
+</li>
+<li>Gid<ol>
+<li>Group ID</li>
+</ol>
+</li>
+<li>Atime<ol>
+<li>Time of last access</li>
+</ol>
+</li>
+<li>Ctime<ol>
+<li>Time when the file was created</li>
+</ol>
+</li>
+<li>Mtime<ol>
+<li>Time when file was modified</li>
+</ol>
+</li>
+<li>Size<ol>
+<li>Offset of the highest byte written</li>
+</ol>
+</li>
+<li>Block count<ol>
+<li>Number of disk blocks used by the file</li>
+<li>Note that number of blocks can be much less than exected given the file size</li>
+</ol>
+</li>
+</ol>
+<p>IMPORTANT:</p>
+<p><code>	</code><strong>Files can be sparsely populated.</strong></p>
+<p><code>	</code>Such as using lseek. the blocks between them might be empty.</p>
+<p><code>	</code>So the size is not the same as the block count.</p>
+<ol>
+<li>Direct Blocks<ol>
+<li>Block numbers of the first 12 blocks in the file</li>
+<li>Most files are small<ol>
+<li>We can find block of file directly from the inode.</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<p>For larger files, we store the data blocks’ offsets greater than 12 blocks in single&#x2F;double&#x2F;triple indirect.</p>
+<ol>
+<li>Single indirect<ol>
+<li>Requires two disk access to read<ol>
+<li>One for the indirect block, one for the target block.</li>
+</ol>
+</li>
+<li>Max file size<ol>
+<li>Assume 1K byte block size, 4 byte block numbers<ol>
+<li>12 * 1K + 1K&#x2F;4 * 1K &#x3D; 268 KiB</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<p>So for large majority of files (&lt;268KiB), <strong>given the inode, only one or two further accesses required</strong> to read any block in file.</p>
+<ol>
+<li>Double indirect<ol>
+<li>–Block number of a block containing block numbers of blocks containing block numbers -&gt; the second level is also block numbers of blocks, the third level has the block numbers</li>
+</ol>
+</li>
+<li>Triple indirect<ol>
+<li>Block number of a block containing block numbers of blocks containing block numbers of blocks containing block numbers</li>
+</ol>
+</li>
+</ol>
+<img src="/2023/04/26/3231note/51.png" class="" title="P16 lec11">
+
+<img src="/2023/04/26/3231note/52.png" class="" title="P17 lec11">
+<h3 id="Max-File-Size"><a href="#Max-File-Size" class="headerlink" title="Max File Size"></a><strong>Max File Size</strong></h3><p>Assume 4 bytes block numbers and 1K blocks</p>
+<p>• The number of addressable blocks</p>
+<p>– Direct Blocks &#x3D; 12</p>
+<p>– Single Indirect Blocks &#x3D; 256</p>
+<p>– Double Indirect Blocks &#x3D; 256 * 256 &#x3D; 65536</p>
+<p>– Triple Indirect Blocks &#x3D; 256 * 256 * 256 &#x3D; 16777216</p>
+<p>• Max File Size</p>
+<p>12 + 256 + 65536 + 16777216 &#x3D; 16843020 blocks ≈ 16 GB</p>
+<p>Example:</p>
+<p>• Assume 4K blocks, 4 byte block numbers, 12 direct blocks</p>
+<p>what if we add</p>
+<p>– lseek(fd, 5242880, SEEK_SET) &#x2F;* 5 megabytes *&#x2F; </p>
+<p>– write(fd, “x”, 1)</p>
+<img src="/2023/04/26/3231note/53.png" class="" title="P24 lec11">
+
+<p>Address &#x3D; 5242880 &#x3D;&#x3D;&gt; </p>
+<p>Block number &#x3D; 5242880&#x2F;4096 &#x3D;1280</p>
+<p>Double indirect offset (20-bit)</p>
+<p>&#x3D; 1280 – 1036</p>
+<p>&#x3D; 244</p>
+<p>Top 10 bits &#x3D; 0 -&gt; first level block’s 0<sup>th</sup> entry</p>
+<p>Lower 10 bits &#x3D; 244-&gt; second level block 244<sup>th</sup> entry</p>
+<h3 id="Best-and-worse-case-access-patterns"><a href="#Best-and-worse-case-access-patterns" class="headerlink" title="Best and worse case access patterns"></a><strong>Best and worse case access patterns</strong></h3><p>Assume inode already in memory</p>
+<p>To read 1 byte</p>
+<p>– Best:</p>
+<p>• 1 access via direct block</p>
+<p>– Worst:</p>
+<p>• 4 accesses via the triple indirect block</p>
+<p>To write 1 byte</p>
+<p>– Best:</p>
+<p>• 1 write via direct block (with no previous content)</p>
+<p>– Worst:</p>
+<p>• 4 reads (to get previous contents of block via triple indirect) + 1 write (to write modified block back)</p>
+<h3 id="Worst-Case-Access-Patterns-with-Unallocated-Indirect-Blocks"><a href="#Worst-Case-Access-Patterns-with-Unallocated-Indirect-Blocks" class="headerlink" title="Worst Case Access Patterns with Unallocated Indirect Blocks"></a><strong>Worst Case Access Patterns with Unallocated Indirect Blocks</strong></h3><p>• Worst to write 1 byte</p>
+<p>– 4 writes (3 indirect blocks; 1 data)</p>
+<ul>
+<li>All indirect are new</li>
+</ul>
+<p>– 1 read, 4 writes (read-write 1 indirect, write 2; write 1 data)</p>
+<ul>
+<li>First indirect has something</li>
+</ul>
+<p>– 2 reads, 3 writes (read 1 indirect, read-write 1 indirect, write 1; write 1 data)</p>
+<ul>
+<li>First and second indirect have something</li>
+</ul>
+<p>– 3 reads, 2 writes (read 2, read-write 1; write 1 data)</p>
+<ul>
+<li>All three indirect have something</li>
+</ul>
+<p>• Worst to read 1 byte</p>
+<p>– If reading writes a zero-filled block on disk</p>
+<p>– Worst case is same as write 1 byte</p>
+<p>– If not, worst-case depends on how deep is the current indirect block tree.</p>
+<h3 id="Inode-Summary"><a href="#Inode-Summary" class="headerlink" title="Inode Summary"></a><strong>Inode Summary</strong></h3><p>The inode (and indirect blocks) contains the on-disk metadata associated with a file</p>
+<p>– Contains mode, owner, and other bookkeeping</p>
+<p>– Efficient random and sequential access via indexed allocation</p>
+<p>– Small files (the majority of files) require only a single access</p>
+<p>– Larger files require progressively more disk accesses for random access</p>
+<p>• Sequential access is still efficient</p>
+<p>– Can support really large files via increasing levels of indirection</p>
+<h3 id="System-V-Disk-Layout-s5fs"><a href="#System-V-Disk-Layout-s5fs" class="headerlink" title="System V Disk Layout (s5fs)"></a><strong>System V Disk Layout (s5fs)</strong></h3><img src="/2023/04/26/3231note/54.png" class="" title="P31 lec11">
+
+<p>– Boot Block</p>
+<p>• contain code to bootstrap the OS</p>
+<p>– Super Block</p>
+<p>• Contains attributes of the file system itself</p>
+<p>• e.g. size, number of inodes, start block of inode array, start of data block area, free inode list, free data block list</p>
+<p>– Inode Array</p>
+<p>– Data blocks</p>
+<h4 id="Problems"><a href="#Problems" class="headerlink" title="Problems"></a><strong>Problems</strong></h4><p>• Inodes at start of disk; data blocks end</p>
+<p>– Long seek times</p>
+<p>• Must read inode before reading data blocks</p>
+<p>• Only one superblock</p>
+<p>– Corrupt the superblock and entire file system is lost</p>
+<p>• Block allocation was suboptimal</p>
+<p>– Consecutive free block list created at FS format time</p>
+<p>• Allocation and de-allocation eventually randomises the list resulting in random allocation</p>
+<p>• Inode free list also randomised over time</p>
+<p>– Directory listing resulted in random inode access pattern</p>
+<h3 id="Berkeley-Fast-Filesystem-FFS"><a href="#Berkeley-Fast-Filesystem-FFS" class="headerlink" title="Berkeley Fast Filesystem (FFS)"></a><strong>Berkeley Fast Filesystem (FFS)</strong></h3><p>•Historically followed s5fs</p>
+<p>–Addressed many limitations with s5fs</p>
+<p>–ext2fs mostly similar</p>
+<h3 id="Layout-of-an-Ext2-FS"><a href="#Layout-of-an-Ext2-FS" class="headerlink" title="Layout of an Ext2 FS"></a><strong>Layout of an Ext2 FS</strong></h3><img src="/2023/04/26/3231note/55.png" class="" title="P34 lec11">
+
+<p>•Partition:</p>
+<p>–Reserved boot block,</p>
+<p>–Collection of equally sized block groups</p>
+<p>–All block groups have the same structure</p>
+<h4 id="Layout-of-a-block-group"><a href="#Layout-of-a-block-group" class="headerlink" title="Layout of a block group"></a><strong>Layout of a block group</strong></h4><img src="/2023/04/26/3231note/56.png" class="" title="P35 lec11">
+
+<p>•<strong>Replicated super block</strong></p>
+<p>–For e2fsck</p>
+<p>•<strong>Replicated Group descriptors</strong></p>
+<p>•Bitmaps identify used inodes&#x2F;blocks</p>
+<p>•All block groups have the same number of data blocks</p>
+<p>•Advantages of this structure:</p>
+<p>–Replication simplifies recovery</p>
+<p>–Proximity of inode tables and data blocks (<strong>reduces seek time</strong>)</p>
+<h4 id="Superblocks"><a href="#Superblocks" class="headerlink" title="Superblocks"></a><strong>Superblocks</strong></h4><p>•Size of the file system, block size and similar parameters</p>
+<p>•Overall free inode and block counters</p>
+<p>•Data indicating whether file system check is needed:</p>
+<p>–Uncleanly unmounted</p>
+<p>–Inconsistency</p>
+<p>–Certain number of mounts since last check</p>
+<p>–Certain time expired since last check</p>
+<p>•Replicated to <strong>provide redundancy to aid recoverability</strong></p>
+<h4 id="Group-Descriptors"><a href="#Group-Descriptors" class="headerlink" title="Group Descriptors"></a><strong>Group Descriptors</strong></h4><p>•Location of the bitmaps</p>
+<p>•Counter for free blocks and inodes in this group</p>
+<p>•Number of directories in the group</p>
+<p>•Replicated to provide redundancy to aid recoverability</p>
+<p>这些信息有助于文件系统定位和管理每个块组的资源。</p>
+<h3 id="Performance-considerations"><a href="#Performance-considerations" class="headerlink" title="Performance considerations"></a><strong>Performance considerations</strong></h3><p>EXT2 optimisations</p>
+<p>– Block groups cluster related inodes and data blocks</p>
+<p>–Pre-allocation of blocks on write (up to 8 blocks)</p>
+<p>•8 bits in bit tables</p>
+<p>•Better contiguity when there are concurrent writes</p>
+<p>–<strong>Aim to store files within a directory in the same group</strong></p>
+<h3 id="Ext2-Directories"><a href="#Ext2-Directories" class="headerlink" title="Ext2 Directories"></a><strong>Ext2 Directories</strong></h3><p>•Directories are files of a special type</p>
+<p>•Consider it a file of special format, managed by the kernel, that uses most of the same machinery to implement it</p>
+<p>–Inodes, etc…</p>
+<p>•Directories translate names to inode numbers</p>
+<p>•Directory entries are of variable length</p>
+<p>•Entries can be deleted in place</p>
+<p>•inode &#x3D; 0</p>
+<p>•Add to length of previous entry</p>
+<img src="/2023/04/26/3231note/57.png" class="" title="P40 lec11">
+
+<img src="/2023/04/26/3231note/58.png" class="" title="P41 lec11">
+
+<p>“f1” &#x3D; inode 7</p>
+<p>“file2” &#x3D; inode 43</p>
+<p>“f3” &#x3D; inode 85</p>
+<h3 id="Hard-Links"><a href="#Hard-Links" class="headerlink" title="Hard Links"></a><strong>Hard Links</strong></h3><p>Inodes can have more than one name -&gt; hard link</p>
+<img src="/2023/04/26/3231note/59.png" class="" title="P44 lec11">
+<h3 id="Reference-Count-in-inode"><a href="#Reference-Count-in-inode" class="headerlink" title="Reference Count in inode"></a><strong>Reference Count in inode</strong></h3><p><strong>Keep a reference count in the inode</strong>, so:</p>
+<p>When we delete a file by name, i.e. remove the directory entry (link), the file system know when to delete the underlying inode</p>
+<p>•Adding a name (directory entry) increments the count</p>
+<p>•Removing a name decrements the count</p>
+<p>•If the reference count &#x3D;&#x3D; 0, then we have <strong>no names for the inode</strong> (it is unreachable), we can <strong>delete the inode</strong> (underlying file or directory)</p>
+<h3 id="Symbolic-links"><a href="#Symbolic-links" class="headerlink" title="Symbolic links"></a><strong>Symbolic links</strong></h3><p>• A symbolic link is a file that contains a reference to another file or directory</p>
+<p>– <strong>Has its own inode and data block</strong>, which <strong>contains a</strong> <strong>path to the target file</strong></p>
+<p>– Marked by a special file attribute</p>
+<p>– Transparent for some operations</p>
+<p>– <strong>Can point across FS boundaries -&gt; symbolic link only care about the path of the certain file, instead of the destination.</strong></p>
+<h3 id="File-system-reliability"><a href="#File-system-reliability" class="headerlink" title="File system reliability"></a><strong>File system reliability</strong></h3><p>• Disk writes are buffered in RAM</p>
+<p>– OS crash or power outage &#x3D;&#x3D;&gt; lost data</p>
+<p>– Commit writes to disk periodically (e.g., every 30 sec)</p>
+<p>– Use the <em>sync</em> command to force a FS flush</p>
+<p>• FS operations are non-atomic</p>
+<p>– Incomplete transaction can leave the FS in an inconsistent state</p>
+<h4 id="Other-examples"><a href="#Other-examples" class="headerlink" title="Other examples"></a><strong>Other examples</strong></h4><p>• e2fsck</p>
+<p>– Scans the disk after an unclean shutdown and attempts to restore FS invariants</p>
+<p>• Journaling file systems</p>
+<p>– Keep a journal of FS updates</p>
+<p>– Before performing an atomic update sequence,</p>
+<p>– write it to the journal</p>
+<p>– Replay the last journal entries upon an unclean shutdown</p>
+<p>– Example: ext3fs</p>
+<h2 id="Lec12-ext3-FS"><a href="#Lec12-ext3-FS" class="headerlink" title="Lec12 ext3 FS"></a>Lec12 ext3 FS</h2><h3 id="Design-goals"><a href="#Design-goals" class="headerlink" title="Design goals"></a><strong>Design goals</strong></h3><p>– <strong>Add journaling capability</strong> to the ext2 FS</p>
+<p>– <strong>Backward and forward compatibility</strong> with ext2</p>
+<p>• Existing ext2 partitions can be mounted as ext3</p>
+<p>– Leverage the proven ext2 performance</p>
+<p>– Reuse most of the ext2 code base</p>
+<p>– Reuse ext2 tools, including e2fsck</p>
+<h3 id="The-ext3-journal"><a href="#The-ext3-journal" class="headerlink" title="The ext3 journal"></a><strong>The ext3 journal</strong></h3><h4 id="Option-1-Journal-FS-data-structure-updates"><a href="#Option-1-Journal-FS-data-structure-updates" class="headerlink" title="Option 1: Journal FS data structure updates"></a><strong>Option 1: Journal FS data structure updates</strong></h4><p>Example: </p>
+<p>– <strong>Start transaction</strong></p>
+<p>– Delete dir entry</p>
+<p>– Delete i-node</p>
+<p>– Release blocks 32, 17, 60</p>
+<p>– <strong>End transaction</strong></p>
+<h5 id="Conclusion-1"><a href="#Conclusion-1" class="headerlink" title="Conclusion"></a><strong>Conclusion</strong></h5><p>✔Efficient use of journal space; hence <strong>faster journaling</strong></p>
+<p>✘ Individual updates are applied separately</p>
+<p>✘ The journaling layer must understand FS semantics</p>
+<h4 id="Option-2-Journal-disk-block-updates"><a href="#Option-2-Journal-disk-block-updates" class="headerlink" title="Option 2: Journal disk block updates"></a><strong>Option 2: Journal disk block updates</strong></h4><p>Example: </p>
+<p>– <strong>Start transaction</strong></p>
+<p>– Update block #n1 (contains the dir entry)</p>
+<p>– Update block #n2 (i-node allocation bitmap)</p>
+<p>– Update block #n3 (data block allocation bitmap)</p>
+<p>– <strong>Add transaction</strong></p>
+<h5 id="Conclusion-2"><a href="#Conclusion-2" class="headerlink" title="Conclusion"></a><strong>Conclusion</strong></h5><p>✗ Even a small update adds a whole block to the journal</p>
+<p>✔ Multiple updates to the same block can be aggregated into a single update</p>
+<p>✔ The journaling layer is FS independent (<strong>easier to implement</strong>)</p>
+<p>Ext3 use this method</p>
+<h3 id="Journaling-Block-Device-JBD"><a href="#Journaling-Block-Device-JBD" class="headerlink" title="Journaling Block Device (JBD)"></a><strong>Journaling Block Device (JBD)</strong></h3><img src="/2023/04/26/3231note/60.png" class="" title="P6 lec12">
+
+<p>JBD interface</p>
+<p>– Start a new transaction</p>
+<p>– Update a disk block as part of a transaction</p>
+<p>– Complete a transaction</p>
+<p>• Completed transactions are buffered in RAM</p>
+<p>– Commit: write transaction data to the journal (persistent storage)</p>
+<p>• Multiple FS transactions are committed in one go</p>
+<p>– Checkpoint: flush the journal to the disk </p>
+<p>• Used when the journal is full or the FS is being unmounted</p>
+<img src="/2023/04/26/3231note/61.png" class="" title="P6 lec12">
+<h3 id="Journaling-modes"><a href="#Journaling-modes" class="headerlink" title="Journaling modes"></a><strong>Journaling modes</strong></h3><p>Ext3 supports two journaling modes</p>
+<p>– Metadata+data</p>
+<p>• Enforces atomicity of all FS operations</p>
+<p>– Metadata journaling</p>
+<p>• Metadata is journalled</p>
+<p>• Data blocks are written directly to the disk</p>
+<p>• Improves performance</p>
+<p>• Enforces file system integrity</p>
+<p>• Does not enforce atomicity of write’s</p>
+<p>– New file content can be stale blocks</p>
+<h3 id="JBD-conclusion"><a href="#JBD-conclusion" class="headerlink" title="JBD conclusion"></a><strong>JBD conclusion</strong></h3><p>JBD</p>
+<p>• JBD can <strong>keep the journal on a block device or in a file</strong></p>
+<p>– Enables compatibility with ext2 (the journal is just a normal file)</p>
+<p>• JBD is independent of ext3-specific data structures</p>
+<p>– Separation of concerns</p>
+<p>• The FS maintains on-disk data and metadata</p>
+<p>• JBD takes care of journaling</p>
+<p>– Code reuse</p>
+<p>• JBD can be used by any other FS that requires journaling</p>
+<h2 id="Lec13-memory-Management"><a href="#Lec13-memory-Management" class="headerlink" title="Lec13 memory Management"></a>Lec13 memory Management</h2><h3 id="Fixed-Partition-Summary"><a href="#Fixed-Partition-Summary" class="headerlink" title="Fixed Partition Summary"></a><strong>Fixed Partition Summary</strong></h3><p>• Simple</p>
+<p>• Easy to implement</p>
+<p>•Can result in poor memory utilisation</p>
+<p>• Due to internal fragmentation</p>
+<p>•Used on IBM System 360 operating system (OS&#x2F;MFT)</p>
+<p>• Announced 6 April, 1964</p>
+<p>• Still applicable for simple embedded systems</p>
+<p>• Static workload known in advance</p>
+<h3 id="Dynamic-Partitioning"><a href="#Dynamic-Partitioning" class="headerlink" title="Dynamic Partitioning"></a><strong>Dynamic Partitioning</strong></h3><h4 id="Allocation"><a href="#Allocation" class="headerlink" title="Allocation"></a><strong>Allocation</strong></h4><p>•Also applicable to malloc()-like in-application allocators</p>
+<p>•Given a region of memory, basic requirements are:</p>
+<p>• Quickly locate a free partition satisfying the request</p>
+<p>• Minimise CPU time search</p>
+<p>• Minimise external fragmentation</p>
+<p>• Minimise memory overhead of bookkeeping</p>
+<p>• Efficiently support merging two adjacent free partitions into a larger partition</p>
+<h5 id="Classic-Approach"><a href="#Classic-Approach" class="headerlink" title="Classic Approach"></a><strong>Classic Approach</strong></h5><p>Represent available memory as a linked list of available “holes” (free memory ranges).</p>
+<p>• Base, size</p>
+<p>• Kept in order of increasing address</p>
+<p>• Simplifies merging of adjacent holes into larger holes.</p>
+<p>• List nodes be stored in the “holes” themselves</p>
+<h4 id="Placement"><a href="#Placement" class="headerlink" title="Placement"></a><strong>Placement</strong></h4><h5 id="First-fit-algorithm"><a href="#First-fit-algorithm" class="headerlink" title="First-fit algorithm"></a><strong>First-fit algorithm</strong></h5><p>• Scan the list for the first entry that fits</p>
+<p>• If greater in size, break it into an allocated and free part</p>
+<p>• Intent: Minimise amount of searching performed</p>
+<p>• Aims to find a match quickly</p>
+<p>• Biases allocation to one end of memory</p>
+<p>• Tends to preserve larger blocks at the end of memory</p>
+<h5 id="Next-fit"><a href="#Next-fit" class="headerlink" title="Next-fit"></a><strong>Next-fit</strong></h5><p>Like first-fit, except it <strong>begins its search from the point in list where the last request succeeded instead of at the beginning</strong>.</p>
+<p>• (Flawed) Intuition: spread allocation more uniformly over entire memory to avoid skipping over small holes at start of memory</p>
+<p>• <strong>Performs worse than first-fit</strong> as it <strong>breaks up the large free space at</strong> </p>
+<p><strong>end of memory</strong></p>
+<h5 id="Best-fit"><a href="#Best-fit" class="headerlink" title="Best-fit"></a><strong>Best-fit</strong></h5><p>• Chooses the block that is closest in size to the request</p>
+<p>• <strong>Performs worse than first-fit</strong></p>
+<p>• Has to search complete list </p>
+<p>• does more work than first-fit</p>
+<p>• Since smallest block is chosen for a process, <strong>the smallest amount of external fragmentation is left</strong> </p>
+<p>• Create lots of unusable holes</p>
+<h5 id="Worst-fit"><a href="#Worst-fit" class="headerlink" title="Worst-fit"></a><strong>Worst-fit</strong></h5><p>• Chooses the block that is <strong>largest in size</strong> (worst-fit)</p>
+<p>• (whimsical) idea is to <strong>leave a usable fragment left over</strong></p>
+<p>• Poor performer</p>
+<p>• <strong>Has to do more work</strong> (like best fit) to <strong>search complete list</strong></p>
+<p>• Does not result in significantly less fragmentation</p>
+<h4 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a><strong>Summary</strong></h4><p>First-fit generally better than the others and easiest to implement</p>
+<p>They are simple solutions to a still-existing OS or application service&#x2F;function –memory allocation.</p>
+<p><strong>Largely have been superseded by more complex and specific allocation strategies</strong></p>
+<h4 id="Compaction"><a href="#Compaction" class="headerlink" title="Compaction"></a><strong>Compaction</strong></h4><p>We can <strong>reduce external fragmentation</strong> by compaction</p>
+<p>• Shuffle memory contents to place all free memory together in one large block.</p>
+<p>• Only if we can relocate running programs?</p>
+<p>• Pointers?</p>
+<p>• Generally <strong>requires hardware support</strong></p>
+<h4 id="Issues-2"><a href="#Issues-2" class="headerlink" title="Issues"></a><strong>Issues</strong></h4><p>• Relocation</p>
+<p>• How does a process run in different locations in memory?</p>
+<p>• Protection</p>
+<p>• How do we prevent processes interfering with each other</p>
+<h3 id="When-are-memory-address-bound"><a href="#When-are-memory-address-bound" class="headerlink" title="When are memory address bound?"></a><strong>When are memory address bound?</strong></h3><p>• Compile&#x2F;link time</p>
+<p>• Compiler&#x2F;Linker binds the addresses</p>
+<p>• Must know “run” location at compile time</p>
+<p>• Recompile if location changes </p>
+<p>• Load time</p>
+<p>• Compiler generates relocatable code</p>
+<p>• Loader binds the addresses at load time</p>
+<p>• Run time</p>
+<p>• Logical compile-time addresses translated to physical addresses by special hardware.</p>
+<img src="/2023/04/26/3231note/62.png" class="" title="P36 lec13">
+<h3 id="Hardware-Support-for-Runtime-Binding-and-Protection"><a href="#Hardware-Support-for-Runtime-Binding-and-Protection" class="headerlink" title="Hardware Support for Runtime Binding and Protection"></a><strong>Hardware Support for Runtime Binding and Protection</strong></h3><p>• For process to run using logical addresses</p>
+<p>• Process expects to access addresses from zero to some limit of memory size</p>
+<p><code>	</code>• Need to add an appropriate offset to its logical addresses</p>
+<p>• Achieve relocation</p>
+<p>• Protect memory “lower” than the process</p>
+<p>• Must limit the maximum logical address the process can generate</p>
+<p>• Protect memory “higher” than the process</p>
+<img src="/2023/04/26/3231note/63.png" class="" title="P38 lec13">
+<h3 id="Base-and-Limit-Registers"><a href="#Base-and-Limit-Registers" class="headerlink" title="Base and Limit Registers"></a><strong>Base and Limit Registers</strong></h3><p>•Also called</p>
+<p>• Base and bound registers</p>
+<p>• Relocation and limit registers</p>
+<p>•Base and limit registers</p>
+<p>• <strong>Restrict and relocate the currently active process</strong></p>
+<p>• Base and limit registers must be changed at</p>
+<p>• Load time</p>
+<p>• Relocation (compaction time)</p>
+<p>• On a context switch</p>
+<h4 id="Pros-2"><a href="#Pros-2" class="headerlink" title="Pros"></a><strong>Pros</strong></h4><p>• Supports protected multi-processing (-tasking)</p>
+<h4 id="Cons-2"><a href="#Cons-2" class="headerlink" title="Cons"></a><strong>Cons</strong></h4><p>• <strong>Physical memory allocation must still be contiguous</strong></p>
+<p>• The entire process must be in memory</p>
+<p>• Do not support partial sharing of address spaces</p>
+<p>• <strong>No shared</strong> code, libraries, or data structures between processes</p>
+<h3 id="Swapping"><a href="#Swapping" class="headerlink" title="Swapping"></a><strong>Swapping</strong></h3><p>• A process can be swapped <strong>temporarily out of memory to a backing store, and then brought back into memory for continued execution</strong>.</p>
+<p>• Swapping involves <strong>transferring the whole process</strong></p>
+<p>• Backing store – fast disk large enough to accommodate copies of all memory images for all users; must provide direct access to these memory images.</p>
+<p>• Can prioritize – <strong>lower-priority process is swapped out so higher-priority process can be loaded and executed</strong>.</p>
+<p>• <strong>Major part of swap time is transfer time</strong>; total transfer time is directly <strong>proportional to the amount of memory swapped</strong>.</p>
+<p>• slow</p>
+<img src="/2023/04/26/3231note/64.png" class="" title="P44 lec13">
+<h3 id="Virtual-memory-paging"><a href="#Virtual-memory-paging" class="headerlink" title="Virtual memory-paging"></a><strong>Virtual memory-paging</strong></h3><p>• Partition physical memory into small <strong>equal sized chunks</strong></p>
+<p>• Called frames</p>
+<p>• Divide each process’s virtual (logical) address space into same size chunks</p>
+<p>• Called pages</p>
+<p>• Virtual memory addresses consist of a page number and offset within the page</p>
+<p>• OS maintains a page table </p>
+<p>• contains the frame location for each page</p>
+<p>• Used by hardware to translate each virtual address to physical address</p>
+<p>• The relation between virtual addresses and physical memory addresses is given by page table</p>
+<p>• <strong>Process’s physical memory does not have to be contiguous</strong></p>
+<h4 id="Paging"><a href="#Paging" class="headerlink" title="Paging"></a><strong>Paging</strong></h4><p>• <strong>No external fragmentation</strong></p>
+<p>• <strong>Small internal fragmentation</strong> (in last page)</p>
+<p>• <strong>Allows sharing</strong> by mapping several pages to the same frame</p>
+<p>• Abstracts physical organisation</p>
+<p>• Programmer only deal with virtual addresses</p>
+<p>• Minimal support for logical organisation</p>
+<p>• Each unit is one or more pages	</p>
+<h3 id="Memory-Management-Unit-Translation-Look-aside-Buffer-x2F-TLB"><a href="#Memory-Management-Unit-Translation-Look-aside-Buffer-x2F-TLB" class="headerlink" title="Memory Management Unit (Translation Look-aside Buffer&#x2F;TLB)"></a><strong>Memory Management Unit (Translation Look-aside Buffer&#x2F;TLB)</strong></h3><img src="/2023/04/26/3231note/65.png" class="" title="P51 lec13">
+<h2 id="Lec14-Virtual-memory"><a href="#Lec14-Virtual-memory" class="headerlink" title="Lec14 Virtual memory"></a>Lec14 Virtual memory</h2><h3 id="Page-based-VM"><a href="#Page-based-VM" class="headerlink" title="Page-based VM"></a><strong>Page-based VM</strong></h3><p>Virtual Memory</p>
+<p>– Divided into equal sized pages</p>
+<p>– A mapping is a translation between </p>
+<p>• A page and a frame</p>
+<p>• A page and invalid</p>
+<p>– Mappings defined at runtime</p>
+<p>• They can change</p>
+<p>– Address space can have holes</p>
+<p>– <strong>Process does not have to be contiguous in physical memory</strong></p>
+<h3 id="Typical-Address-space-Layout"><a href="#Typical-Address-space-Layout" class="headerlink" title="Typical Address space Layout"></a><strong>Typical Address space Layout</strong></h3><p>• Stack region is at top, and can grow down</p>
+<p>• Heap has free space to grow up</p>
+<p>• Text is typically read-only</p>
+<p>• Kernel is in a reserved, protected, shared region</p>
+<p>• 0-th page typically not used, why? -&gt; NULL pointer</p>
+<p>• A process may be only partially resident</p>
+<p>– Allows OS to store individual pages on disk</p>
+<p>– Saves memory for infrequently used data &amp; code</p>
+<p>• What happens if we access non resident memory? -&gt; Page fault</p>
+<h3 id="Page-fault"><a href="#Page-fault" class="headerlink" title="Page fault"></a><strong>Page fault</strong></h3><p>• Referencing an invalid page triggers a page fault</p>
+<p>• An exception handled by the OS</p>
+<p>• Broadly, two standard page fault types</p>
+<p>– Illegal Address (protection error)</p>
+<p>• Signal or kill the process</p>
+<p>– Page not resident</p>
+<p>• Get an empty frame</p>
+<p>• Load page from disk</p>
+<p>• Update page (translation) table (enter frame #, set valid bit, etc.</p>
+<p>• Restart the faulting instruction</p>
+<h3 id="Shared-Pages"><a href="#Shared-Pages" class="headerlink" title="Shared Pages"></a><strong>Shared Pages</strong></h3><h4 id="Private-code-and-data"><a href="#Private-code-and-data" class="headerlink" title="Private code and data"></a><strong>Private code and data</strong></h4><p>– Each process has own copy of code and data</p>
+<p>– Code and data can appear anywhere in the address space</p>
+<h4 id="Shared-code"><a href="#Shared-code" class="headerlink" title="Shared code"></a><strong>Shared code</strong></h4><p>– Single copy of code shared between all processes executing it</p>
+<p>– Code must not be self modifying</p>
+<p>– Code must appear at same address in all processes</p>
+<h3 id="Trashing"><a href="#Trashing" class="headerlink" title="Trashing"></a><strong>Trashing</strong></h3><p>• CPU utilisation <strong>tends to increase with the degree of multiprogramming</strong></p>
+<p>– <strong>number of processes in system</strong></p>
+<p>• <strong>Higher degrees of multiprogramming – less memory available per process</strong></p>
+<p>• Some process’s working sets may no longer fit in RAM</p>
+<p>– Implies an increasing page fault rate</p>
+<p>• Eventually many processes have insufficient memory</p>
+<p>– Can’t always find a runnable process</p>
+<p>– Decreasing CPU utilisation</p>
+<p>– System become I&#x2F;O limited</p>
+<ul>
+<li>This is trashing</li>
+</ul>
+<img src="/2023/04/26/3231note/66.png" class="" title="P31 lec15">
+<h3 id="Recovery-From-Thrashing"><a href="#Recovery-From-Thrashing" class="headerlink" title="Recovery From Thrashing"></a><strong>Recovery From Thrashing</strong></h3><p>In the presence of increasing page fault frequency and decreasing CPU utilisation</p>
+<p>– Suspend a few processes to reduce degree of multiprogramming</p>
+<p>– Resident pages of suspended processes will migrate to backing store</p>
+<p>– More physical memory becomes available</p>
+<p>• Less faults, faster progress for runnable processes</p>
+<p>– Resume suspended processes later when memory pressure eases</p>
+<h3 id="Page-Size"><a href="#Page-Size" class="headerlink" title="Page Size"></a><strong>Page Size</strong></h3><p><strong>Increasing page size</strong></p>
+<p><strong>Increases internal fragmentation</strong></p>
+<p>§ 		reduces adaptability to working set size</p>
+<p><strong>Decreases number of pages</strong></p>
+<p>Reduces size of page tables</p>
+<p><strong>Increases TLB coverage</strong></p>
+<p>Reduces number of TLB misses</p>
+<p><strong>Increases page fault latency</strong></p>
+<p>Need to read more from disk before restarting process</p>
+<p><strong>Increases swapping I&#x2F;O throughput</strong></p>
+<p>Small I&#x2F;O are dominated by seek&#x2F;rotation delays</p>
+<p><strong>Optimal page size is a (work-load dependent) trade-off</strong></p>
+<h2 id="Lec16-Multiprocessor-Systems"><a href="#Lec16-Multiprocessor-Systems" class="headerlink" title="Lec16 Multiprocessor Systems"></a>Lec16 Multiprocessor Systems</h2><h3 id="Amdahl’s-law"><a href="#Amdahl’s-law" class="headerlink" title="Amdahl’s law"></a><strong>Amdahl’s law</strong></h3><p>•Given a proportion P of a program that can be made parallel, and the remaining serial portion (1-P), speedup by using N processor</p>
+<img src="/2023/04/26/3231note/67.png" class="" title="P5 lec16">
+<h3 id="Bus-based-uniform-memory-access-multiprocessors"><a href="#Bus-based-uniform-memory-access-multiprocessors" class="headerlink" title="Bus-based uniform memory access multiprocessors"></a><strong>Bus-based uniform memory access multiprocessors</strong></h3><p>Simplest MP is more than one processor on a single bus connect to memory</p>
+<p>• Access to all memory occurs at the same speed for all processors.</p>
+<p>• Bus bandwidth becomes a bottleneck with more than just a few CPUs</p>
+<img src="/2023/04/26/3231note/68.png" class="" title="P7 lec16">
+<h4 id="Multiprocessor-caches"><a href="#Multiprocessor-caches" class="headerlink" title="Multiprocessor caches"></a><strong>Multiprocessor caches</strong></h4><p>Each processor has a cache to reduce its need for access to memory</p>
+<p>• Hope is most accesses are to the local cache</p>
+<p>• <strong>Bus bandwidth still becomes a bottleneck with many CPUs</strong></p>
+<img src="/2023/04/26/3231note/69.png" class="" title="P8 lec16">
+<h4 id="Cache-consistency"><a href="#Cache-consistency" class="headerlink" title="Cache consistency"></a><strong>Cache consistency</strong></h4><p>Cache consistency is usually handled by the hardware.</p>
+<p>• Writes to one cache propagate to, or invalidate appropriate entries on other caches</p>
+<p>• <strong>Cache transactions also consume bus bandwidth</strong></p>
+<h4 id="Multi-core-Processor"><a href="#Multi-core-Processor" class="headerlink" title="Multi-core Processor"></a><strong>Multi-core Processor</strong></h4><img src="/2023/04/26/3231note/70.png" class="" title="P11 lec16">
+<h4 id="Summary-1"><a href="#Summary-1" class="headerlink" title="Summary"></a><strong>Summary</strong></h4><p>With only a single shared bus, scalability can be <strong>limited by the bus bandwidth</strong> of the single bus</p>
+<p>• Caching only helps so much</p>
+<p>•Multiprocessors can</p>
+<p>• Increase computation power beyond that available from a single CPU</p>
+<p>• Share resources such as disk and memory</p>
+<p>•However</p>
+<p>• Assumes parallelizable workload to be effective </p>
+<p>• Assumes not I&#x2F;O bound</p>
+<p>• <strong>Shared buses (bus bandwidth) limits scalability</strong></p>
+<p>• <strong>Can be reduced</strong> via hardware design</p>
+<p>• Can be reduced by carefully crafted software behaviour</p>
+<p>• Good cache locality together with limited data sharing where possible</p>
+<h3 id="Each-CPU-has-its-own-OS"><a href="#Each-CPU-has-its-own-OS" class="headerlink" title="Each CPU has its own OS"></a><strong>Each CPU has its own OS</strong></h3><p>• Statically allocate physical memory to each CPU</p>
+<p>• Each CPU runs its own independent OS</p>
+<p>• Share peripherals</p>
+<p>• Each CPU (OS) handles its processes system calls</p>
+<img src="/2023/04/26/3231note/71.png" class="" title="P15 lec16">
+
+<p>• Used in early multiprocessor systems to ‘get them going’</p>
+<p>• <strong>Simpler to implement</strong></p>
+<p>• <strong>Avoids CPU-based concurrency issues by not sharing</strong></p>
+<p>• Scales – no shared serial sections</p>
+<p>• Modern analogy, virtualisation in the cloud</p>
+<h4 id="Issues-3"><a href="#Issues-3" class="headerlink" title="Issues"></a><strong>Issues</strong></h4><p>• Each processor has its own scheduling queue</p>
+<p>• We can have one processor overloaded, and the rest idle</p>
+<p>• Each processor has its own memory partition</p>
+<p>• We can a one processor thrashing, and the others with free memory</p>
+<p>• <strong>No way to move free memory from one OS to another</strong></p>
+<h3 id="Symmetric-Multiprocessors-SMP"><a href="#Symmetric-Multiprocessors-SMP" class="headerlink" title="Symmetric Multiprocessors (SMP)"></a><strong>Symmetric Multiprocessors (SMP)</strong></h3><img src="/2023/04/26/3231note/72.png" class="" title="P18 lec16">
+
+<p>• OS kernel run on all processors</p>
+<p>• Load and resource are balance between all processors</p>
+<p>• Including kernel execution</p>
+<p>• Issue: <strong>Real concurrency in the kernel</strong></p>
+<p>• Need carefully applied synchronisation primitives to avoid disaster</p>
+<p>• One alternative: A single mutex that make the <strong>entire kernel a large critical section</strong></p>
+<p>• <strong>Only one CPU can be in the kernel at a time</strong></p>
+<p>• <strong>The “big lock” becomes a bottleneck</strong> when in-kernel processing exceeds what can be done on a single CPU</p>
+<p>• Better alternative: identify largely independent parts of the kernel and <strong>make each of them their own critical section</strong></p>
+<p>• <strong>Allows more parallelism in the kernel</strong></p>
+<p>• Issue: Difficult task</p>
+<p>• Code is mostly similar to uniprocessor code</p>
+<p>• Hard part is <strong>identifying independent parts that don’t interfere with each other</strong></p>
+<p>• Remember all the inter-dependencies between OS subsystems.</p>
+<h3 id="Multiprocessor-synchronisation"><a href="#Multiprocessor-synchronisation" class="headerlink" title="Multiprocessor synchronisation"></a><strong>Multiprocessor synchronisation</strong></h3><p>Given we need synchronisation, how can we achieve it on a multiprocessor machine?</p>
+<p>• Unlike a uniprocessor, <strong>disabling interrupts does not work.</strong> </p>
+<p>• It does not prevent other CPUs from running in parallel</p>
+<p>• <strong>Need special hardware support</strong></p>
+<h4 id="Test-and-set"><a href="#Test-and-set" class="headerlink" title="Test and set"></a><strong>Test and set</strong></h4><p>Hardware guarantees that the instruction executes atomically on a </p>
+<p>CPU.</p>
+<p>• Atomically: As an indivisible unit.</p>
+<p>• The instruction can not stop half way through</p>
+<p><strong>• It does not work without some extra hardware support</strong></p>
+<h5 id="•-A-solution"><a href="#•-A-solution" class="headerlink" title="• A solution:"></a><strong>•</strong> A solution:</h5><p>• Hardware blocks all other CPUs from accessing the bus during the TSL instruction to prevent memory accesses by any other CPU.</p>
+<p>• TSL has mutually exclusive access to memory for duration of instruction</p>
+<p>BUT <strong>Test-and Set is a busy-wait synchronisation primitive. -&gt; Spinlock</strong></p>
+<h5 id="•-Issue"><a href="#•-Issue" class="headerlink" title="• Issue:"></a><strong>• Issue:</strong></h5><p>• Lock contention leads to spinning on the lock</p>
+<p>• Spinning on a lock requires blocking the bus which slows all other CPUs down </p>
+<p>• Independent of whether other CPUs need a lock or not </p>
+<p>• Causes bus contention</p>
+<h5 id="Caching-does-not-help-reduce-bus-contention"><a href="#Caching-does-not-help-reduce-bus-contention" class="headerlink" title="Caching does not help reduce bus contention"></a><strong>Caching does not help reduce bus contention</strong></h5><p>• Either TSL still blocks the bus</p>
+<p>• Or TSL requires exclusive access to an entry in the local cache</p>
+<p>• Requires invalidation of same entry in other caches, and loading entry into local cache</p>
+<p>• Many CPUs performing TSL simply bounce a single exclusive entry between all caches using the bus</p>
+<h5 id="Reducing-Bus-contention"><a href="#Reducing-Bus-contention" class="headerlink" title="Reducing Bus contention"></a><strong>Reducing Bus contention</strong></h5><p>• <strong>Read before TSL</strong></p>
+<p>• Spin reading the lock variable waiting for it to change</p>
+<p>• When it does, use TSL to acquire the lock</p>
+<p>• <strong>Allows lock to be shared read-only in all caches until its released</strong> </p>
+<p>• no bus traffic until actual release</p>
+<p>• No race conditions, as acquisition is still with TSL.</p>
+<h5 id="Benchmark"><a href="#Benchmark" class="headerlink" title="Benchmark"></a><strong>Benchmark</strong></h5><img src="/2023/04/26/3231note/73.png" class="" title="P40 lec16">
+
+<p>• Test and set performs <strong>poorly once there is enough CPUs to cause contention(争夺) for lock</strong></p>
+<p>• Expected</p>
+<p>• <strong>Read before Test and Set performs better</strong></p>
+<p>• <strong>Performance less than expected</strong></p>
+<p>• Still significant <strong>contention on lock when CPUs notice release and all attempt acquisition</strong></p>
+<p>• Critical section performance degenerates</p>
+<p>• Critical section requires bus traffic to modify shared structure</p>
+<p>• Lock holder competes with CPU that’s waiting as they test and set, so the lock holder is slower</p>
+<p>• Slower lock holder results in more contention</p>
+<h3 id="Spinning-vs-blocking-and-switching"><a href="#Spinning-vs-blocking-and-switching" class="headerlink" title="Spinning vs blocking and switching"></a><strong>Spinning vs blocking and switching</strong></h3><h4 id="Uniprocessor"><a href="#Uniprocessor" class="headerlink" title="Uniprocessor"></a><strong>Uniprocessor</strong></h4><p>• <strong>Spinning (busy-waiting) on a lock makes no sense on a uniprocessor</strong></p>
+<p>• The was <strong>no other running process to release the lock</strong></p>
+<p>• Blocking and (eventually) switching to the lock holder is the only sensible option.</p>
+<p>•On SMP systems, the decision to spin or block is not as clear.</p>
+<p>• The lock is held by another running CPU and will be freed without necessarily switching away from the requestor</p>
+<img src="/2023/04/26/3231note/74.png" class="" title="P42 lec16">
+
+<img src="/2023/04/26/3231note/75.png" class="" title="P43 lec16">
+<h4 id="Multiprocessor"><a href="#Multiprocessor" class="headerlink" title="Multiprocessor"></a><strong>Multiprocessor</strong></h4><p>• Blocking and switching</p>
+<p>• <strong>to another process takes time</strong></p>
+<p>• Save context and restore another</p>
+<p>• Cache contains current process not new process</p>
+<p>• Adjusting the cache working set also takes time</p>
+<p>• TLB is similar to cache</p>
+<p>• Switching back when the lock is free encounters the same again</p>
+<p>• <strong>Spinning wastes CPU time directly</strong></p>
+<img src="/2023/04/26/3231note/76.png" class="" title="P45 lec16">
+
+<img src="/2023/04/26/3231note/77.png" class="" title="P46 lec16">
+<h4 id="Trade-off"><a href="#Trade-off" class="headerlink" title="Trade off"></a><strong>Trade off</strong></h4><p>• If lock is <strong>held for less time than the overhead of switching to and back</strong></p>
+<p>ÞIt’s more <strong>efficient to spin</strong></p>
+<p><strong>Spinlocks expect critical sections to be short</strong></p>
+<p>No waiting for I&#x2F;O within a spinlock</p>
+<p>No nesting locks within a spinlock</p>
+<h3 id="Preemption-and-spinlocks"><a href="#Preemption-and-spinlocks" class="headerlink" title="Preemption and spinlocks"></a><strong>Preemption and spinlocks</strong></h3><p>• <strong>Critical sections synchronised via spinlocks are expected to be short</strong></p>
+<p>• Avoid other CPUs wasting cycles spinning</p>
+<p>• What happens if the spinlock holder is preempted at end of holder’s timeslice</p>
+<p>• Mutual exclusion is still guaranteed</p>
+<p>• Other CPUs will spin until the holder is scheduled again!!!!!</p>
+<p><strong>Spinlock implementations disable interrupts</strong> in addition to acquiring locks </p>
+<p>• avoids lock-holder preemption</p>
+<p>• avoids spinning on a uniprocessor</p>
+<h2 id="Lec17-scheduling"><a href="#Lec17-scheduling" class="headerlink" title="Lec17 scheduling"></a>Lec17 scheduling</h2><h3 id="Basic"><a href="#Basic" class="headerlink" title="Basic"></a><strong>Basic</strong></h3><p>The scheduler decides who to run next.</p>
+<p>– The process of choosing is called scheduling.</p>
+<p>Scheduling decisions can have a dramatic effect on the perceived performance of the system</p>
+<p>– Can also affect correctness of a system with deadlines</p>
+<h3 id="Application-Behaviour"><a href="#Application-Behaviour" class="headerlink" title="Application Behaviour"></a><strong>Application Behaviour</strong></h3><img src="/2023/04/26/3231note/78.png" class="" title="P7 lec17">
+
+<ol>
+<li>CPU-Bound process<ol>
+<li>• Spends most of its computing</li>
+<li>• Time to completion largely <strong>determined by received CPU time</strong></li>
+</ol>
+</li>
+<li>I&#x2F;O-Bound process<ol>
+<li>– Spend most of its time <strong>waiting for I&#x2F;O to complete</strong><ol>
+<li>• Small bursts of CPU to process I&#x2F;O and request next I&#x2F;O</li>
+</ol>
+</li>
+<li>– Time to completion largely <strong>determined by I&#x2F;O request time</strong></li>
+</ol>
+</li>
+</ol>
+<h4 id="Observation"><a href="#Observation" class="headerlink" title="Observation"></a><strong>Observation</strong></h4><p>• We need a mix of CPU-bound and I&#x2F;O-bound processes </p>
+<p>to keep both CPU and I&#x2F;O systems busy</p>
+<p>• Process can go from CPU- to I&#x2F;O-bound (or vice ersa) in different phase of execution</p>
+<h4 id="Insight"><a href="#Insight" class="headerlink" title="Insight"></a><strong>Insight</strong></h4><p>• Choosing to run an I&#x2F;O-bound process delays a CPU-bound process by very little </p>
+<p>• Choosing to run a CPU-bound process prior to an I&#x2F;O-bound process delays the next I&#x2F;O request significantly </p>
+<p>– No overlap of I&#x2F;O waiting with computation </p>
+<p>– Results in device (disk) not as busy as possible </p>
+<p>Þ Generally, favour I&#x2F;O-bound processes over CPU-bound processes</p>
+<h3 id="When-is-scheduling-performed"><a href="#When-is-scheduling-performed" class="headerlink" title="When is scheduling performed"></a><strong>When is scheduling performed</strong></h3><p>when a process (or thread) can <strong>no longer continue, or when an activity results in more than one ready process</strong>.</p>
+<h3 id="Preemptive-versus-Non-preemptive-Scheduling-先发调度与后发调度"><a href="#Preemptive-versus-Non-preemptive-Scheduling-先发调度与后发调度" class="headerlink" title="Preemptive versus Non-preemptive Scheduling 先发调度与后发调度"></a><strong>Preemptive versus Non-preemptive Scheduling 先发调度与后发调度</strong></h3><h4 id="Non-preemptive"><a href="#Non-preemptive" class="headerlink" title="Non-preemptive"></a><strong>Non-preemptive</strong></h4><p>– Once a thread is in the running state, it continues until it completes, blocks on I&#x2F;O, or voluntarily yields the CPU</p>
+<p>– A single process can monopolised the entire system</p>
+<h4 id="Preemptive"><a href="#Preemptive" class="headerlink" title="Preemptive"></a><strong>Preemptive</strong></h4><p>– Current thread <strong>can be interrupted by OS</strong> and moved to ready state.</p>
+<p>– Usually after a timer interrupt and process has exceeded its maximum run time</p>
+<p>• <strong>Can also be as a result of higher priority process that has become ready</strong> (after I&#x2F;O interrupt). – Ensures fairer service as single thread can’t monopolise the system</p>
+<p>• Requires a timer interrupt</p>
+<h3 id="Categories-of-scheduling-algorithms"><a href="#Categories-of-scheduling-algorithms" class="headerlink" title="Categories of scheduling algorithms"></a><strong>Categories of scheduling algorithms</strong></h3><p>• The choice of scheduling algorithm depends on the goals of the application (or the operating system)</p>
+<p>– No one algorithm suits all environments</p>
+<p>• We can roughly categorise scheduling algorithms as follows</p>
+<p>– Batch Systems</p>
+<p>• No users directly waiting, can optimise for overall machine performance</p>
+<p>– Interactive Systems</p>
+<p>• Users directly waiting for their results, can optimise for users perceived performance</p>
+<p>– Realtime Systems </p>
+<p>• Jobs have deadlines, must schedule such that all jobs (predictably) meet their deadlines.</p>
+<h3 id="Goals-of-scheduling-Algorithms"><a href="#Goals-of-scheduling-Algorithms" class="headerlink" title="Goals of scheduling Algorithms"></a><strong>Goals of scheduling Algorithms</strong></h3><h4 id="All-algorithms"><a href="#All-algorithms" class="headerlink" title="All algorithms"></a><strong>All algorithms</strong></h4><p>– Fairness</p>
+<p>• Give each process a fair share of the CPU</p>
+<p>– Policy Enforcement</p>
+<p>• What ever policy chosen, the scheduler should ensure it is carried out</p>
+<p>– Balance&#x2F;Efficiency</p>
+<p>• Try to keep all parts of the system busy</p>
+<h4 id="Interactive-Algorithms"><a href="#Interactive-Algorithms" class="headerlink" title="Interactive Algorithms"></a><strong>Interactive Algorithms</strong></h4><p>– <strong>Minimise response time</strong></p>
+<p>• Response time is the time difference between issuing a command and getting the result</p>
+<p>– E.g selecting a menu, and getting the result of that selection</p>
+<p>• Response time is important to the user’s perception of the performance of the system.</p>
+<p>– <strong>Provide Proportionality</strong></p>
+<p>• Proportionality is the user expectation that short jobs will have a short response time, and long jobs can have a long response time.</p>
+<p>• <strong>Generally, favour short jobs</strong></p>
+<h4 id="Real-time-Algorithms"><a href="#Real-time-Algorithms" class="headerlink" title="Real-time Algorithms"></a><strong>Real-time Algorithms</strong></h4><p>– Must meet deadlines</p>
+<p>• Each job&#x2F;task has a deadline.</p>
+<p>• A missed deadline can result in data loss or catastrophic failure</p>
+<p>– Aircraft control system missed deadline to apply brakes</p>
+<p>– Provide Predictability</p>
+<p>• For some apps, an occasional missed deadline is okay</p>
+<p>– E.g. DVD decoder</p>
+<p>• Predictable behaviour allows smooth DVD</p>
+<h3 id="Round-Robin-Scheduling"><a href="#Round-Robin-Scheduling" class="headerlink" title="Round Robin Scheduling"></a><strong>Round Robin Scheduling</strong></h3><p>• Each process is given a timeslice to run in</p>
+<p>• When the timeslice expires, the next process preempts the current process, and runs for its timeslice, and so on</p>
+<p>– The preempted process is placed at the end of the queue</p>
+<p>• Implemented with</p>
+<p>– A ready queue</p>
+<p>– A regular timer interrupt</p>
+<h4 id="Pros-3"><a href="#Pros-3" class="headerlink" title="Pros"></a><strong>Pros</strong></h4><p><code> </code>– Fair, easy to implement</p>
+<h4 id="Cons-3"><a href="#Cons-3" class="headerlink" title="Cons"></a><strong>Cons</strong></h4><p>– <strong>Assumes everybody is equal</strong></p>
+<h4 id="Issue-how-long-should-the-timeslice-be"><a href="#Issue-how-long-should-the-timeslice-be" class="headerlink" title="Issue: how long should the timeslice be"></a><strong>Issue: how long should the timeslice be</strong></h4><p>– Too short</p>
+<p>• <strong>Waste a lot of time switching between processes</strong></p>
+<p>• Example: timeslice of 4ms with 1ms context switch &#x3D; 20% round robin overhead </p>
+<p>– Too long</p>
+<p>• <strong>System is not responsive</strong></p>
+<p>• Example: timeslice of 100ms</p>
+<p>– If 10 people hit “enter” key simultaneously, the last guy to run will only see progress after 1 second.</p>
+<p>• Degenerates into FCFS if timeslice longer than burst length</p>
+<h3 id="Priorities"><a href="#Priorities" class="headerlink" title="Priorities"></a><strong>Priorities</strong></h3><p>• Each Process (or thread) is associated with a priority</p>
+<p>• Provides basic mechanism to influence a scheduler decision:</p>
+<p>– <strong>Scheduler will always chooses a thread of higher priority over lower priority</strong> </p>
+<p>• Priorities can be defined internally or externally</p>
+<p>– Internal: e.g. I&#x2F;O bound or CPU bound</p>
+<p>– External: e.g. based on importance to the user</p>
+<p><strong>Priority-driven preemptively scheduled</strong></p>
+<img src="/2023/04/26/3231note/79.png" class="" title="P46 lec17">
+
+<p>Usually implemented by <strong>multiple priority queues, with round robin on each queue</strong></p>
+<h4 id="Con"><a href="#Con" class="headerlink" title="Con:"></a><strong>Con:</strong></h4><p>– <strong>Low priorities can starve</strong></p>
+<p>• Need to adapt priorities periodically</p>
+<p>– Based on ageing or execution history</p>
+<h3 id="Traditional-UNIX-scheduler"><a href="#Traditional-UNIX-scheduler" class="headerlink" title="Traditional UNIX scheduler"></a><strong>Traditional UNIX scheduler</strong></h3><p>• <strong>Two-level scheduler:</strong></p>
+<p>– <strong>High-level scheduler schedules processes between memory and disk</strong></p>
+<p>– <strong>Low-level scheduler is CPU scheduler</strong></p>
+<p>• Based on a multi-level queue structure with round robin at each level</p>
+<p>• The highest priority (lower number) is scheduled</p>
+<p>• <strong>Priorities are re-calculated once per second, and re-inserted in appropriate queue</strong></p>
+<p>– Avoid starvation of low priority threads</p>
+<p>– Penalise CPU-bound threads</p>
+<p><strong>• Priority &#x3D; CPU_usage +nice +base</strong></p>
+<p>– <strong>CPU_usage</strong> &#x3D; number of clock ticks</p>
+<p>• <strong>Decays over time</strong> to avoid permanently penalising the process </p>
+<p>– <strong>Nice</strong> is a value given to the process by <strong>a user to permanently boost or reduce its priority</strong></p>
+<p>• Reduce priority of background jobs </p>
+<p>– <strong>Base</strong> is a set of hardwired, negative values used to boost priority of I&#x2F;O bound system activities</p>
+<p>• Swapper, disk I&#x2F;O, Character I&#x2F;O</p>
+<img src="/2023/04/26/3231note/80.png" class="" title="P47 lec17">
+<h3 id="Multiprocessor-scheduling"><a href="#Multiprocessor-scheduling" class="headerlink" title="Multiprocessor scheduling"></a><strong>Multiprocessor scheduling</strong></h3><h4 id="A-single-shared-ready-queue"><a href="#A-single-shared-ready-queue" class="headerlink" title="A single shared ready queue"></a><strong>A single shared ready queue</strong></h4><p>When a CPU goes idle, it <strong>takes the highest priority process</strong> from the shared ready queue</p>
+<h5 id="Pros-4"><a href="#Pros-4" class="headerlink" title="Pros"></a><strong>Pros</strong></h5><p>– Simple</p>
+<p>– Automatic load balancing</p>
+<h5 id="Cons-4"><a href="#Cons-4" class="headerlink" title="Cons"></a><strong>Cons</strong></h5><p>– <strong>Lock contention</strong> on the ready queue can be a major bottleneck</p>
+<p>• Due to frequent scheduling or many CPUs or both</p>
+<p>– Not all CPUs are equal</p>
+<p>• The last CPU a process ran on is likely to have more related entries in the cache -&gt; waste time to load another process</p>
+<h3 id="Affinity-scheduling"><a href="#Affinity-scheduling" class="headerlink" title="Affinity scheduling"></a><strong>Affinity scheduling</strong></h3><p>Basic Idea</p>
+<p>– Try hard to <strong>run a process on the CPU it ran on last time</strong></p>
+<p>• <strong>One approach: Multiple Queue Multiprocessor Scheduling</strong></p>
+<h3 id="Multiple-Queue-SMP-Scheduling"><a href="#Multiple-Queue-SMP-Scheduling" class="headerlink" title="Multiple Queue SMP Scheduling"></a><strong>Multiple Queue SMP Scheduling</strong></h3><p>• <strong>Each CPU has its own ready queue</strong></p>
+<p>• Coarse-grained algorithm assigns processes to CPUs</p>
+<p>– Defines their affinity, and roughly balances the load</p>
+<p>• The bottom-level fine-grained scheduler:</p>
+<p>– Is the frequently invoked scheduler (e.g. on blocking on I&#x2F;O, a lock, or exhausting a timeslice)</p>
+<p>– Runs on each CPU and selects from its own ready queue</p>
+<p>• Ensures affinity</p>
+<p>– If nothing is available from the local ready queue, it runs a process from another CPUs ready queue rather than go idle</p>
+<p>• Termed “Work stealing</p>
+<h4 id="Pros-5"><a href="#Pros-5" class="headerlink" title="Pros"></a><strong>Pros</strong></h4><p>No lock contention on per-CPU ready queues in the (hopefully) common case</p>
+<p>– <strong>Load balancing to avoid idle queues</strong></p>
+<p>– Automatic affinity to a single CPU for more <strong>cache friendly behaviour</strong></p>
+<p>多队列 SMP 调度（Multiple Queue SMP Scheduling）是一种用于多处理器（SMP，Symmetric Multi-Processing）系统的进程调度策略。在这种策略中，每个处理器都有自己的一组独立的进程队列。这种方法旨在通过将进程分配到不同的处理器上，实现更好的负载平衡和并行性。</p>
+<p>多队列 SMP 调度的主要特点如下：</p>
+<ol>
+<li><strong>独立的进程队列</strong>：在多队列 SMP 调度中，每个处理器都有自己的一组独立的进程队列，用于存储和管理等待执行的进程。每个处理器根据自己的队列中的进程来执行调度和分配任务。</li>
+<li><strong>负载平衡</strong>：多队列 SMP 调度策略尝试在处理器之间实现负载平衡。当一个处理器的队列中的进程数量明显多于其他处理器时，系统可能会将一些进程迁移到其他处理器的队列中，以实现更好的负载平衡。</li>
+<li><strong>并行性</strong>：多队列 SMP 调度充分利用了多处理器系统的并行性。通过在不同的处理器上同时执行多个进程，可以提高系统的整体性能和吞吐量。</li>
+<li><strong>局部性</strong>：由于每个处理器都有自己的进程队列，多队列 SMP 调度有助于维护进程的局部性。这意味着一个进程可能会在同一个处理器上连续执行，从而提高缓存命中率和性能。</li>
+</ol>
+<p>然而，多队列 SMP 调度也存在一些挑战和缺点，例如在负载平衡和同步开销方面的问题。为了解决这些问题，研究人员和工程师们还提出了许多其他的多处理器调度策略，如全局队列调度、簇调度等。</p>
+<p>总之，多队列 SMP 调度是一种适用于多处理器系统的进程调度策略，通过为每个处理器分配独立的进程队列来实现负载平衡和并行性。尽管存在一些挑战，但这种方法仍然是多处理器调度的一个重要方案</p>
+<h4 id="Cons-5"><a href="#Cons-5" class="headerlink" title="Cons:"></a><strong>Cons:</strong></h4><ol>
+<li><strong>负载平衡困难</strong>：尽管多队列 SMP 调度试图在处理器之间实现负载平衡，但在实践中，达到理想的负载平衡可能非常具有挑战性。在某些情况下，可能会出现一个或多个处理器的队列拥有大量进程，而其他处理器却处于空闲状态。这种不平衡可能导致系统资源的浪费和性能下降。</li>
+<li><strong>同步和通信开销</strong>：在多队列 SMP 调度中，处理器之间可能需要频繁地进行进程迁移以实现负载平衡。这会导致同步和通信开销增加，从而降低系统性能。在具有许多处理器的系统中，同步和通信开销可能会变得非常显著。</li>
+<li><strong>进程优先级管理困难</strong>：由于每个处理器都有自己的进程队列，管理不同处理器队列中的进程优先级可能变得复杂。在全局队列调度策略中，所有处理器共享一个进程队列，因此优先级管理相对更简单。</li>
+<li><strong>高速缓存一致性问题</strong>：多队列 SMP 调度中的进程迁移可能会导致高速缓存一致性问题。当一个进程从一个处理器迁移到另一个处理器时，它可能需要重新填充高速缓存，这会导致性能下降。虽然多队列 SMP 调度有助于维护进程的局部性，但频繁的进程迁移可能会削弱这一优势。</li>
+<li><strong>可伸缩性问题</strong>：在具有大量处理器的系统中，多队列 SMP 调度可能会遇到可伸缩性问题。随着处理器数量的增加，实现有效的负载平衡、优先级管理和同步变得更加困难。</li>
+</ol>
+<p>尽管存在这些弊端，多队列 SMP 调度仍然是多处理器系统中的一种有效调度策略。为了解决这些问题，研究人员和工程师们还提出了许多其他的多处理器调度策略，如全局队列调度、簇调度等。这些策略在不同方面具有各自的优缺点，因此需要根据具体应用场景和需求进行选择。</p>
+<p><strong>TO BE NOTICED: NOT CONTAIN PART OF LEC 14 AND MOST PART OF LEC 15</strong></p>
+</div>
         </div>
         
             <div class="kratos-copyright text-center clearfix">
@@ -1434,7 +2208,7 @@
                     <a class="tag-none-link" href="/tags/COMP3231/" rel="tag">COMP3231</a>
                 </div>
                 <div class="pull-date">
-                    <time datetime="2023-04-26T14:53:02.840Z" itemprop="dateModified">最后编辑：2023-04-27</time>
+                    <time datetime="2023-04-27T15:08:57.448Z" itemprop="dateModified">最后编辑：2023-04-28</time>
                 </div>
             </div>
         </footer>
@@ -1536,7 +2310,7 @@
         <span class="toc-progress-bar" role="progressbar" aria-label="阅读进度："></span>
     </h4>
     <div class="textwidget">
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Lec-02-Processes-and-Threads"><span class="toc-text">Lec 02 Processes and Threads</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Processes"><span class="toc-text">Processes:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Threads"><span class="toc-text">Threads:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Process-Termination"><span class="toc-text">Process Termination</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Process-and-Thread-States"><span class="toc-text">Process and Thread States</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Running-%E2%86%92-Ready"><span class="toc-text">Running → Ready</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Running-%E2%86%92-Blocked"><span class="toc-text">Running → Blocked</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Schedular"><span class="toc-text">Schedular</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Thread-Model"><span class="toc-text">Thread Model</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Thread-Usage"><span class="toc-text">Thread Usage</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Summary-in-Threads"><span class="toc-text">Summary in Threads</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lec-03-Concurrency-and-Synchronisation"><span class="toc-text">Lec 03 Concurrency and Synchronisation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Concurrency-Example"><span class="toc-text">Concurrency Example:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Critical-Region-and-how-to-identify"><span class="toc-text">Critical Region and how to identify</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Critical-Regions-Solutions"><span class="toc-text">Critical Regions Solutions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mutual-exclusion-by-taking-turns"><span class="toc-text">Mutual exclusion by taking turns</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mutual-Exclusion-by-disabling-interrupts"><span class="toc-text">Mutual Exclusion by disabling interrupts</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hardware-Support-for-mutual-exclusion"><span class="toc-text">Hardware Support for mutual exclusion</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tackling-the-busy-wait-problem"><span class="toc-text">Tackling the busy-wait problem:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Producer-Consumer-Problem-bounded-buffer-problem"><span class="toc-text">Producer-Consumer Problem(bounded buffer problem)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Issues"><span class="toc-text">Issues:</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Semaphores"><span class="toc-text">Semaphores</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Producer-Consumer-problem-with-semaphores"><span class="toc-text">Producer Consumer problem with semaphores:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Summarising-Semaphores"><span class="toc-text">Summarising Semaphores</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Monitor"><span class="toc-text">Monitor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Condition-Variable"><span class="toc-text">Condition Variable</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Synchronisation-Primitives-in-OS-x2F-161"><span class="toc-text">Synchronisation Primitives in OS&#x2F;161</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Locks"><span class="toc-text">Locks</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Semaphores-1"><span class="toc-text">Semaphores</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Condition-Variables"><span class="toc-text">Condition Variables</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Condition-Variables-and-Bounded-Buffers"><span class="toc-text">Condition Variables and Bounded Buffers</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Producer-consumer-solution-with-condition-variable"><span class="toc-text">Producer-consumer solution with condition variable</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dining-Philosophers"><span class="toc-text">Dining Philosophers</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reader-and-Writer-Problem"><span class="toc-text">Reader and Writer Problem</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lec04-DeadLock"><span class="toc-text">Lec04 DeadLock</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DeadLock-amp-Resources"><span class="toc-text">DeadLock &amp; Resources</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Four-conditions-for-deadlock"><span class="toc-text">Four conditions for deadlock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deadlock-avoidance"><span class="toc-text">Deadlock avoidance</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Method-1-Ostrich-Algorithm"><span class="toc-text">Method 1: Ostrich Algorithm</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Method-2-Deadlock-prevention"><span class="toc-text">Method 2: Deadlock prevention</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Attacking-the-Mutual-Exclusion-Condition-Not-feasible"><span class="toc-text">Attacking the Mutual Exclusion Condition (Not feasible)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Attacking-the-hold-and-wait-condition-request-resources-initially"><span class="toc-text">Attacking the hold and wait condition (request resources initially)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Attacking-the-No-Preemption-condition-%E6%97%A0%E4%BC%98%E5%85%88%E6%9D%83%E6%9D%A1%E4%BB%B6-take-resources-away"><span class="toc-text">Attacking the No Preemption condition(无优先权条件)(take resources away)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Attacking-the-circular-wait-condition-Order-resources"><span class="toc-text">Attacking the circular wait condition (Order resources)</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Method-3-Detection-and-recovery"><span class="toc-text">Method 3: Detection and recovery</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Strategy"><span class="toc-text">Strategy:</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Detection-with-Multiple-Resources-of-Each-Type"><span class="toc-text">Detection with Multiple Resources of Each Type</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#Algorithm"><span class="toc-text">Algorithm</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Recovery-from-Deadlock"><span class="toc-text">Recovery from Deadlock</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Method-4-Deadlock-Avoidance"><span class="toc-text">Method 4: Deadlock Avoidance</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Safe-and-Unsafe-states"><span class="toc-text">Safe and Unsafe states</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LiveLock"><span class="toc-text">LiveLock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Bankers-Algorithm"><span class="toc-text">Bankers Algorithm</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Starvation"><span class="toc-text">Starvation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lec05-Processes-and-Threads-Implementation"><span class="toc-text">Lec05 Processes and Threads Implementation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MIPS-Registers"><span class="toc-text">MIPS Registers</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Branching-and-Jumping"><span class="toc-text">Branching and Jumping</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Process"><span class="toc-text">Process</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Memory-allocation"><span class="toc-text">Memory allocation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mode-distinguish"><span class="toc-text">Mode distinguish</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#User-level-Threads"><span class="toc-text">User-level Threads</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Pros"><span class="toc-text">Pros</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Cons"><span class="toc-text">Cons</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Kernel-provided-Threads"><span class="toc-text">Kernel-provided Threads</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Cons-1"><span class="toc-text">Cons</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Pros-1"><span class="toc-text">Pros</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Context-Switch"><span class="toc-text">Context Switch</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Context-Switch-Occurrence"><span class="toc-text">Context Switch Occurrence</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Context-Switch-Addition"><span class="toc-text">Context Switch Addition</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lec06-Syscalls"><span class="toc-text">Lec06 Syscalls</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Syscall-Definition"><span class="toc-text">Syscall Definition</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CPU-Computation-Model"><span class="toc-text">CPU Computation Model</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Privileged-mode-operation"><span class="toc-text">Privileged-mode operation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#System-call-mechanism-overview"><span class="toc-text">System call mechanism overview</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Coprocessor-0-CP0"><span class="toc-text">Coprocessor 0 (CP0)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Exception-management"><span class="toc-text">Exception management</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#C0-status"><span class="toc-text">C0_status</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%C2%B7c0-cause"><span class="toc-text">·c0_cause</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#C0-epc"><span class="toc-text">C0_epc</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hardware-Exception-handling"><span class="toc-text">Hardware Exception handling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MIPS-System-Calls"><span class="toc-text">MIPS System Calls</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OS-x2F-161-Systems-Calls"><span class="toc-text">OS&#x2F;161 Systems Calls</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Summary-of-System-Call-in-User-Mode"><span class="toc-text">Summary of System Call in User Mode</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#System-Calls-%E2%80%93-Kernel-Side"><span class="toc-text">System Calls – Kernel Side</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lec07-Computer-Hardware-Review"><span class="toc-text">Lec07 Computer Hardware Review</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Memory-Hierarchy"><span class="toc-text">Memory Hierarchy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Cashing"><span class="toc-text">Cashing</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CPU-cache"><span class="toc-text">CPU cache</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Performance"><span class="toc-text">Performance</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Effective-Access-Time"><span class="toc-text">Effective Access Time</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Avoid-Waiting-for-Disk-Access"><span class="toc-text">Avoid Waiting for Disk Access</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Avoid-Waiting-for-Internet-Access"><span class="toc-text">Avoid Waiting for Internet Access</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lec08-File-Management"><span class="toc-text">Lec08 File Management</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#File-Names"><span class="toc-text">File Names</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#File-Structure"><span class="toc-text">File Structure</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#File-Types"><span class="toc-text">File Types</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#File-Access-Types-Patterns"><span class="toc-text">File Access Types (Patterns)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Typical-File-Operations"><span class="toc-text">Typical File Operations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Criteria-for-File-Organization"><span class="toc-text">Criteria for File Organization</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#File-Directories"><span class="toc-text">File Directories</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hierarchical-Tree-Structured-Directory"><span class="toc-text">Hierarchical (Tree Structured) Directory</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Relative-and-Absolute-Pathnames"><span class="toc-text">Relative and Absolute Pathnames</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Typical-Directory-Operations"><span class="toc-text">Typical Directory Operations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nice-Properties-of-UNIX-naming"><span class="toc-text">Nice Properties of UNIX naming</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Access-Rights"><span class="toc-text">Access Rights</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Simultaneous-Access"><span class="toc-text">Simultaneous Access</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lec09-File-System-Internals"><span class="toc-text">Lec09 File System Internals</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#UNIX-Storage-Stack"><span class="toc-text">UNIX Storage Stack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Difference-between-some-FS"><span class="toc-text">Difference between some FS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Property-of-hard-disk"><span class="toc-text">Property of hard disk</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Implementing-a-file-system"><span class="toc-text">Implementing a file system</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Requirements"><span class="toc-text">Requirements</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#File-Allocation-Methods"><span class="toc-text">File Allocation Methods</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Contiguous-Allocation"><span class="toc-text">Contiguous Allocation</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Dynamic-Allocation-Strategies"><span class="toc-text">Dynamic Allocation Strategies</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#External-and-Internal-fragmentation"><span class="toc-text">External and Internal fragmentation</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#External-fragmentation"><span class="toc-text">External fragmentation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Internal-fragmentation"><span class="toc-text">Internal fragmentation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Conclusion"><span class="toc-text">Conclusion</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dynamic-allocation-Linked-list-allocation"><span class="toc-text">Dynamic allocation : Linked list allocation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dynamic-Allocation-File-allocation-Table-FAT"><span class="toc-text">Dynamic Allocation: File allocation Table (FAT)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#File-allocation-table-disk-layout"><span class="toc-text">File allocation table disk layout</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dynamical-Allocation-inode-based-FS-structure"><span class="toc-text">Dynamical Allocation: inode-based FS structure</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Issues-1"><span class="toc-text">Issues:</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Free-block-List"><span class="toc-text">Free block List</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Bit-tables"><span class="toc-text">Bit tables</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Implementing-directories"><span class="toc-text">Implementing directories</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fixed-size-directory-entries"><span class="toc-text">Fixed-size directory entries</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Variable-size-directory-entries"><span class="toc-text">Variable-size directory entries</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Searching-Directory-methods"><span class="toc-text">Searching Directory methods</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Storing-file-attributes"><span class="toc-text">Storing file attributes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#File-system-block-size"><span class="toc-text">File system block size</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lec10-UNIX-File-Management-continue"><span class="toc-text">Lec10 UNIX File Management (continue)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Virtual-file-system-VFS"><span class="toc-text">Virtual file system (VFS)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Data-Types-in-VFS-Interface"><span class="toc-text">Data Types in VFS Interface</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#VFS"><span class="toc-text">VFS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Vnode"><span class="toc-text">Vnode</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#File-descriptors"><span class="toc-text">File descriptors</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Attributes"><span class="toc-text">Attributes</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#State-associated-with-a-file-descriptor"><span class="toc-text">State associated with a file descriptor</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Use-single-fd-table-with-no-of-table"><span class="toc-text">Use single fd table with no of table</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Per-process-File-descriptor-array"><span class="toc-text">Per-process File descriptor array</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Issue"><span class="toc-text">Issue</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Per-Process-fd-table-with-global-open-file-table"><span class="toc-text">Per-Process fd table with global open file table</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Buffer"><span class="toc-text">Buffer</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Buffer-disk-blocks"><span class="toc-text">Buffer disk blocks</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Cache"><span class="toc-text">Cache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Buffer-and-caching-are-related"><span class="toc-text">Buffer and caching are related</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Cache-replacement"><span class="toc-text">Cache replacement</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#File-system-consistency"><span class="toc-text">File system consistency</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Possible-Solution"><span class="toc-text">Possible Solution</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NOT-FINISHED-YET"><span class="toc-text">NOT FINISHED YET</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Lec-02-Processes-and-Threads"><span class="toc-text">Lec 02 Processes and Threads</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Processes"><span class="toc-text">Processes:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Threads"><span class="toc-text">Threads:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Process-Termination"><span class="toc-text">Process Termination</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Process-and-Thread-States"><span class="toc-text">Process and Thread States</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Running-%E2%86%92-Ready"><span class="toc-text">Running → Ready</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Running-%E2%86%92-Blocked"><span class="toc-text">Running → Blocked</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Schedular"><span class="toc-text">Schedular</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Thread-Model"><span class="toc-text">Thread Model</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Thread-Usage"><span class="toc-text">Thread Usage</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Summary-in-Threads"><span class="toc-text">Summary in Threads</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lec-03-Concurrency-and-Synchronisation"><span class="toc-text">Lec 03 Concurrency and Synchronisation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Concurrency-Example"><span class="toc-text">Concurrency Example:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Critical-Region-and-how-to-identify"><span class="toc-text">Critical Region and how to identify</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Critical-Regions-Solutions"><span class="toc-text">Critical Regions Solutions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mutual-exclusion-by-taking-turns"><span class="toc-text">Mutual exclusion by taking turns</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mutual-Exclusion-by-disabling-interrupts"><span class="toc-text">Mutual Exclusion by disabling interrupts</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hardware-Support-for-mutual-exclusion"><span class="toc-text">Hardware Support for mutual exclusion</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tackling-the-busy-wait-problem"><span class="toc-text">Tackling the busy-wait problem:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Producer-Consumer-Problem-bounded-buffer-problem"><span class="toc-text">Producer-Consumer Problem(bounded buffer problem)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Issues"><span class="toc-text">Issues:</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Semaphores"><span class="toc-text">Semaphores</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Producer-Consumer-problem-with-semaphores"><span class="toc-text">Producer Consumer problem with semaphores:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Summarising-Semaphores"><span class="toc-text">Summarising Semaphores</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Monitor"><span class="toc-text">Monitor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Condition-Variable"><span class="toc-text">Condition Variable</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Synchronisation-Primitives-in-OS-x2F-161"><span class="toc-text">Synchronisation Primitives in OS&#x2F;161</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Locks"><span class="toc-text">Locks</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Semaphores-1"><span class="toc-text">Semaphores</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Condition-Variables"><span class="toc-text">Condition Variables</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Condition-Variables-and-Bounded-Buffers"><span class="toc-text">Condition Variables and Bounded Buffers</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Producer-consumer-solution-with-condition-variable"><span class="toc-text">Producer-consumer solution with condition variable</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dining-Philosophers"><span class="toc-text">Dining Philosophers</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reader-and-Writer-Problem"><span class="toc-text">Reader and Writer Problem</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lec04-DeadLock"><span class="toc-text">Lec04 DeadLock</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DeadLock-amp-Resources"><span class="toc-text">DeadLock &amp; Resources</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Four-conditions-for-deadlock"><span class="toc-text">Four conditions for deadlock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deadlock-avoidance"><span class="toc-text">Deadlock avoidance</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Method-1-Ostrich-Algorithm"><span class="toc-text">Method 1: Ostrich Algorithm</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Method-2-Deadlock-prevention"><span class="toc-text">Method 2: Deadlock prevention</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Attacking-the-Mutual-Exclusion-Condition-Not-feasible"><span class="toc-text">Attacking the Mutual Exclusion Condition (Not feasible)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Attacking-the-hold-and-wait-condition-request-resources-initially"><span class="toc-text">Attacking the hold and wait condition (request resources initially)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Attacking-the-No-Preemption-condition-%E6%97%A0%E4%BC%98%E5%85%88%E6%9D%83%E6%9D%A1%E4%BB%B6-take-resources-away"><span class="toc-text">Attacking the No Preemption condition(无优先权条件)(take resources away)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Attacking-the-circular-wait-condition-Order-resources"><span class="toc-text">Attacking the circular wait condition (Order resources)</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Method-3-Detection-and-recovery"><span class="toc-text">Method 3: Detection and recovery</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Strategy"><span class="toc-text">Strategy:</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Detection-with-Multiple-Resources-of-Each-Type"><span class="toc-text">Detection with Multiple Resources of Each Type</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#Algorithm"><span class="toc-text">Algorithm</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Recovery-from-Deadlock"><span class="toc-text">Recovery from Deadlock</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Method-4-Deadlock-Avoidance"><span class="toc-text">Method 4: Deadlock Avoidance</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Safe-and-Unsafe-states"><span class="toc-text">Safe and Unsafe states</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LiveLock"><span class="toc-text">LiveLock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Bankers-Algorithm"><span class="toc-text">Bankers Algorithm</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Starvation"><span class="toc-text">Starvation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lec05-Processes-and-Threads-Implementation"><span class="toc-text">Lec05 Processes and Threads Implementation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MIPS-Registers"><span class="toc-text">MIPS Registers</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Branching-and-Jumping"><span class="toc-text">Branching and Jumping</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Process"><span class="toc-text">Process</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Memory-allocation"><span class="toc-text">Memory allocation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mode-distinguish"><span class="toc-text">Mode distinguish</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#User-level-Threads"><span class="toc-text">User-level Threads</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Pros"><span class="toc-text">Pros</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Cons"><span class="toc-text">Cons</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Kernel-provided-Threads"><span class="toc-text">Kernel-provided Threads</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Cons-1"><span class="toc-text">Cons</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Pros-1"><span class="toc-text">Pros</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Context-Switch"><span class="toc-text">Context Switch</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Context-Switch-Occurrence"><span class="toc-text">Context Switch Occurrence</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Context-Switch-Addition"><span class="toc-text">Context Switch Addition</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lec06-Syscalls"><span class="toc-text">Lec06 Syscalls</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Syscall-Definition"><span class="toc-text">Syscall Definition</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CPU-Computation-Model"><span class="toc-text">CPU Computation Model</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Privileged-mode-operation"><span class="toc-text">Privileged-mode operation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#System-call-mechanism-overview"><span class="toc-text">System call mechanism overview</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Coprocessor-0-CP0"><span class="toc-text">Coprocessor 0 (CP0)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Exception-management"><span class="toc-text">Exception management</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#C0-status"><span class="toc-text">C0_status</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%C2%B7c0-cause"><span class="toc-text">·c0_cause</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#C0-epc"><span class="toc-text">C0_epc</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hardware-Exception-handling"><span class="toc-text">Hardware Exception handling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MIPS-System-Calls"><span class="toc-text">MIPS System Calls</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OS-x2F-161-Systems-Calls"><span class="toc-text">OS&#x2F;161 Systems Calls</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Summary-of-System-Call-in-User-Mode"><span class="toc-text">Summary of System Call in User Mode</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#System-Calls-%E2%80%93-Kernel-Side"><span class="toc-text">System Calls – Kernel Side</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lec07-Computer-Hardware-Review"><span class="toc-text">Lec07 Computer Hardware Review</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Memory-Hierarchy"><span class="toc-text">Memory Hierarchy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Cashing"><span class="toc-text">Cashing</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CPU-cache"><span class="toc-text">CPU cache</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Performance"><span class="toc-text">Performance</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Effective-Access-Time"><span class="toc-text">Effective Access Time</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Avoid-Waiting-for-Disk-Access"><span class="toc-text">Avoid Waiting for Disk Access</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Avoid-Waiting-for-Internet-Access"><span class="toc-text">Avoid Waiting for Internet Access</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lec08-File-Management"><span class="toc-text">Lec08 File Management</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#File-Names"><span class="toc-text">File Names</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#File-Structure"><span class="toc-text">File Structure</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#File-Types"><span class="toc-text">File Types</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#File-Access-Types-Patterns"><span class="toc-text">File Access Types (Patterns)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Typical-File-Operations"><span class="toc-text">Typical File Operations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Criteria-for-File-Organization"><span class="toc-text">Criteria for File Organization</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#File-Directories"><span class="toc-text">File Directories</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hierarchical-Tree-Structured-Directory"><span class="toc-text">Hierarchical (Tree Structured) Directory</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Relative-and-Absolute-Pathnames"><span class="toc-text">Relative and Absolute Pathnames</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Typical-Directory-Operations"><span class="toc-text">Typical Directory Operations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nice-Properties-of-UNIX-naming"><span class="toc-text">Nice Properties of UNIX naming</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Access-Rights"><span class="toc-text">Access Rights</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Simultaneous-Access"><span class="toc-text">Simultaneous Access</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lec09-File-System-Internals"><span class="toc-text">Lec09 File System Internals</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#UNIX-Storage-Stack"><span class="toc-text">UNIX Storage Stack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Difference-between-some-FS"><span class="toc-text">Difference between some FS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Property-of-hard-disk"><span class="toc-text">Property of hard disk</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Implementing-a-file-system"><span class="toc-text">Implementing a file system</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Requirements"><span class="toc-text">Requirements</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#File-Allocation-Methods"><span class="toc-text">File Allocation Methods</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Contiguous-Allocation"><span class="toc-text">Contiguous Allocation</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Dynamic-Allocation-Strategies"><span class="toc-text">Dynamic Allocation Strategies</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#External-and-Internal-fragmentation"><span class="toc-text">External and Internal fragmentation</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#External-fragmentation"><span class="toc-text">External fragmentation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Internal-fragmentation"><span class="toc-text">Internal fragmentation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Conclusion"><span class="toc-text">Conclusion</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dynamic-allocation-Linked-list-allocation"><span class="toc-text">Dynamic allocation : Linked list allocation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dynamic-Allocation-File-allocation-Table-FAT"><span class="toc-text">Dynamic Allocation: File allocation Table (FAT)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#File-allocation-table-disk-layout"><span class="toc-text">File allocation table disk layout</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dynamical-Allocation-inode-based-FS-structure"><span class="toc-text">Dynamical Allocation: inode-based FS structure</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Issues-1"><span class="toc-text">Issues:</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Free-block-List"><span class="toc-text">Free block List</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Bit-tables"><span class="toc-text">Bit tables</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Implementing-directories"><span class="toc-text">Implementing directories</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fixed-size-directory-entries"><span class="toc-text">Fixed-size directory entries</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Variable-size-directory-entries"><span class="toc-text">Variable-size directory entries</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Searching-Directory-methods"><span class="toc-text">Searching Directory methods</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Storing-file-attributes"><span class="toc-text">Storing file attributes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#File-system-block-size"><span class="toc-text">File system block size</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lec10-UNIX-File-Management-continue"><span class="toc-text">Lec10 UNIX File Management (continue)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Virtual-file-system-VFS"><span class="toc-text">Virtual file system (VFS)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Data-Types-in-VFS-Interface"><span class="toc-text">Data Types in VFS Interface</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#VFS"><span class="toc-text">VFS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Vnode"><span class="toc-text">Vnode</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#File-descriptors"><span class="toc-text">File descriptors</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Attributes"><span class="toc-text">Attributes</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#State-associated-with-a-file-descriptor"><span class="toc-text">State associated with a file descriptor</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Use-single-fd-table-with-no-of-table"><span class="toc-text">Use single fd table with no of table</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Per-process-File-descriptor-array"><span class="toc-text">Per-process File descriptor array</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Issue"><span class="toc-text">Issue</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Per-Process-fd-table-with-global-open-file-table"><span class="toc-text">Per-Process fd table with global open file table</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Buffer"><span class="toc-text">Buffer</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Buffer-disk-blocks"><span class="toc-text">Buffer disk blocks</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Cache"><span class="toc-text">Cache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Buffer-and-caching-are-related"><span class="toc-text">Buffer and caching are related</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Cache-replacement"><span class="toc-text">Cache replacement</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#File-system-consistency"><span class="toc-text">File system consistency</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Possible-Solution"><span class="toc-text">Possible Solution</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lec11-ext2-FS"><span class="toc-text">Lec11 ext2 FS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Descriptions"><span class="toc-text">Descriptions:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#i-node"><span class="toc-text">i-node</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Inode-contents"><span class="toc-text">Inode contents</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Max-File-Size"><span class="toc-text">Max File Size</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Best-and-worse-case-access-patterns"><span class="toc-text">Best and worse case access patterns</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Worst-Case-Access-Patterns-with-Unallocated-Indirect-Blocks"><span class="toc-text">Worst Case Access Patterns with Unallocated Indirect Blocks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Inode-Summary"><span class="toc-text">Inode Summary</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#System-V-Disk-Layout-s5fs"><span class="toc-text">System V Disk Layout (s5fs)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Problems"><span class="toc-text">Problems</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Berkeley-Fast-Filesystem-FFS"><span class="toc-text">Berkeley Fast Filesystem (FFS)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Layout-of-an-Ext2-FS"><span class="toc-text">Layout of an Ext2 FS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Layout-of-a-block-group"><span class="toc-text">Layout of a block group</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Superblocks"><span class="toc-text">Superblocks</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Group-Descriptors"><span class="toc-text">Group Descriptors</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Performance-considerations"><span class="toc-text">Performance considerations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Ext2-Directories"><span class="toc-text">Ext2 Directories</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hard-Links"><span class="toc-text">Hard Links</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference-Count-in-inode"><span class="toc-text">Reference Count in inode</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Symbolic-links"><span class="toc-text">Symbolic links</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#File-system-reliability"><span class="toc-text">File system reliability</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Other-examples"><span class="toc-text">Other examples</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lec12-ext3-FS"><span class="toc-text">Lec12 ext3 FS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Design-goals"><span class="toc-text">Design goals</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#The-ext3-journal"><span class="toc-text">The ext3 journal</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Option-1-Journal-FS-data-structure-updates"><span class="toc-text">Option 1: Journal FS data structure updates</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Conclusion-1"><span class="toc-text">Conclusion</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Option-2-Journal-disk-block-updates"><span class="toc-text">Option 2: Journal disk block updates</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Conclusion-2"><span class="toc-text">Conclusion</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Journaling-Block-Device-JBD"><span class="toc-text">Journaling Block Device (JBD)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Journaling-modes"><span class="toc-text">Journaling modes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JBD-conclusion"><span class="toc-text">JBD conclusion</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lec13-memory-Management"><span class="toc-text">Lec13 memory Management</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Fixed-Partition-Summary"><span class="toc-text">Fixed Partition Summary</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dynamic-Partitioning"><span class="toc-text">Dynamic Partitioning</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Allocation"><span class="toc-text">Allocation</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Classic-Approach"><span class="toc-text">Classic Approach</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Placement"><span class="toc-text">Placement</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#First-fit-algorithm"><span class="toc-text">First-fit algorithm</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Next-fit"><span class="toc-text">Next-fit</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Best-fit"><span class="toc-text">Best-fit</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Worst-fit"><span class="toc-text">Worst-fit</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Summary"><span class="toc-text">Summary</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Compaction"><span class="toc-text">Compaction</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Issues-2"><span class="toc-text">Issues</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#When-are-memory-address-bound"><span class="toc-text">When are memory address bound?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hardware-Support-for-Runtime-Binding-and-Protection"><span class="toc-text">Hardware Support for Runtime Binding and Protection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Base-and-Limit-Registers"><span class="toc-text">Base and Limit Registers</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Pros-2"><span class="toc-text">Pros</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Cons-2"><span class="toc-text">Cons</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Swapping"><span class="toc-text">Swapping</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Virtual-memory-paging"><span class="toc-text">Virtual memory-paging</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Paging"><span class="toc-text">Paging</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Memory-Management-Unit-Translation-Look-aside-Buffer-x2F-TLB"><span class="toc-text">Memory Management Unit (Translation Look-aside Buffer&#x2F;TLB)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lec14-Virtual-memory"><span class="toc-text">Lec14 Virtual memory</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Page-based-VM"><span class="toc-text">Page-based VM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Typical-Address-space-Layout"><span class="toc-text">Typical Address space Layout</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Page-fault"><span class="toc-text">Page fault</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Shared-Pages"><span class="toc-text">Shared Pages</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Private-code-and-data"><span class="toc-text">Private code and data</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Shared-code"><span class="toc-text">Shared code</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Trashing"><span class="toc-text">Trashing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Recovery-From-Thrashing"><span class="toc-text">Recovery From Thrashing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Page-Size"><span class="toc-text">Page Size</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lec16-Multiprocessor-Systems"><span class="toc-text">Lec16 Multiprocessor Systems</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Amdahl%E2%80%99s-law"><span class="toc-text">Amdahl’s law</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Bus-based-uniform-memory-access-multiprocessors"><span class="toc-text">Bus-based uniform memory access multiprocessors</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Multiprocessor-caches"><span class="toc-text">Multiprocessor caches</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Cache-consistency"><span class="toc-text">Cache consistency</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Multi-core-Processor"><span class="toc-text">Multi-core Processor</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Summary-1"><span class="toc-text">Summary</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Each-CPU-has-its-own-OS"><span class="toc-text">Each CPU has its own OS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Issues-3"><span class="toc-text">Issues</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Symmetric-Multiprocessors-SMP"><span class="toc-text">Symmetric Multiprocessors (SMP)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Multiprocessor-synchronisation"><span class="toc-text">Multiprocessor synchronisation</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Test-and-set"><span class="toc-text">Test and set</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E2%80%A2-A-solution"><span class="toc-text">• A solution:</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E2%80%A2-Issue"><span class="toc-text">• Issue:</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Caching-does-not-help-reduce-bus-contention"><span class="toc-text">Caching does not help reduce bus contention</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Reducing-Bus-contention"><span class="toc-text">Reducing Bus contention</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Benchmark"><span class="toc-text">Benchmark</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Spinning-vs-blocking-and-switching"><span class="toc-text">Spinning vs blocking and switching</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Uniprocessor"><span class="toc-text">Uniprocessor</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Multiprocessor"><span class="toc-text">Multiprocessor</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Trade-off"><span class="toc-text">Trade off</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Preemption-and-spinlocks"><span class="toc-text">Preemption and spinlocks</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lec17-scheduling"><span class="toc-text">Lec17 scheduling</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Basic"><span class="toc-text">Basic</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Application-Behaviour"><span class="toc-text">Application Behaviour</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Observation"><span class="toc-text">Observation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Insight"><span class="toc-text">Insight</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#When-is-scheduling-performed"><span class="toc-text">When is scheduling performed</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Preemptive-versus-Non-preemptive-Scheduling-%E5%85%88%E5%8F%91%E8%B0%83%E5%BA%A6%E4%B8%8E%E5%90%8E%E5%8F%91%E8%B0%83%E5%BA%A6"><span class="toc-text">Preemptive versus Non-preemptive Scheduling 先发调度与后发调度</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Non-preemptive"><span class="toc-text">Non-preemptive</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Preemptive"><span class="toc-text">Preemptive</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Categories-of-scheduling-algorithms"><span class="toc-text">Categories of scheduling algorithms</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Goals-of-scheduling-Algorithms"><span class="toc-text">Goals of scheduling Algorithms</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#All-algorithms"><span class="toc-text">All algorithms</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Interactive-Algorithms"><span class="toc-text">Interactive Algorithms</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Real-time-Algorithms"><span class="toc-text">Real-time Algorithms</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Round-Robin-Scheduling"><span class="toc-text">Round Robin Scheduling</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Pros-3"><span class="toc-text">Pros</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Cons-3"><span class="toc-text">Cons</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Issue-how-long-should-the-timeslice-be"><span class="toc-text">Issue: how long should the timeslice be</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Priorities"><span class="toc-text">Priorities</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Con"><span class="toc-text">Con:</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Traditional-UNIX-scheduler"><span class="toc-text">Traditional UNIX scheduler</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Multiprocessor-scheduling"><span class="toc-text">Multiprocessor scheduling</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#A-single-shared-ready-queue"><span class="toc-text">A single shared ready queue</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Pros-4"><span class="toc-text">Pros</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Cons-4"><span class="toc-text">Cons</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Affinity-scheduling"><span class="toc-text">Affinity scheduling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Multiple-Queue-SMP-Scheduling"><span class="toc-text">Multiple Queue SMP Scheduling</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Pros-5"><span class="toc-text">Pros</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Cons-5"><span class="toc-text">Cons:</span></a></li></ol></li></ol></li></ol>
     </div>
 </aside>
                 
