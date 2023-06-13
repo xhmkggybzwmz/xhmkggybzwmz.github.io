@@ -26,7 +26,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="https://xhmkggybzwmz.github.io/2023/06/09/2511-Design-note/cover.png">
 <meta property="article:published_time" content="2023-06-08T15:56:04.000Z">
-<meta property="article:modified_time" content="2023-06-08T16:01:18.500Z">
+<meta property="article:modified_time" content="2023-06-13T15:04:53.686Z">
 <meta property="article:author" content="Xhmkggybz">
 <meta property="article:tag" content="COMP2511">
 <meta name="twitter:card" content="summary">
@@ -225,7 +225,7 @@
                         <i class="fa fa-edit"></i> 
                         
                         
-                            49
+                            ~2.04K
                         
                         字
                     </li>
@@ -237,7 +237,7 @@
             
             <div id="expire-alert" class="alert alert-warning hidden" role="alert">
                 <div class="icon"><i class="fa fa-warning"></i></div>
-                <div class="text"><p>本文最后编辑于 <time datetime="1686240078500"></time> 前，其中的内容可能需要更新。</p></div>
+                <div class="text"><p>本文最后编辑于 <time datetime="1686668693686"></time> 前，其中的内容可能需要更新。</p></div>
             </div>
             
             
@@ -245,6 +245,87 @@
             <hr />
             <div itemprop="articleBody"><p>UNSW 2511 23T2 note (Design part)</p>
 <span id="more"></span>
+<div class="alert alert-primary"><div class="icon"><i class="fa fa-refresh"></i></div><div class="text"><p>keep updating</p>
+</div></div>
+
+
+<h1 id="使用UML的Domain-Modelling"><a href="#使用UML的Domain-Modelling" class="headerlink" title="使用UML的Domain Modelling"></a>使用UML的Domain Modelling</h1><h2 id="领域模型-Domain-models"><a href="#领域模型-Domain-models" class="headerlink" title="领域模型 Domain models"></a>领域模型 Domain models</h2><ul>
+<li>Domain models 被用来直观地表示重要的 <strong>领域概念(Domain concepts)</strong> 和他们之间的 <strong>关系</strong></li>
+<li>Domain models 有助于<strong>澄清(clarify)<strong>和</strong>沟通(communicate)<strong>重要的特定领域概念， 并在</strong>需求收集和设计阶段</strong>中使用</li>
+<li>领域建模 (domain modelling) 是将相关领域概念表达为一个领域模型</li>
+<li>领域模型也通常被称为<strong>概念模型(conceptual models)<strong>或</strong>领域对象模型(domain object models)</strong></li>
+</ul>
+<h2 id="需求分析-amp-领域建模-Requirements-Analysis-vs-Domain-modelling"><a href="#需求分析-amp-领域建模-Requirements-Analysis-vs-Domain-modelling" class="headerlink" title="需求分析 &amp; 领域建模 Requirements Analysis vs Domain modelling"></a>需求分析 &amp; 领域建模 Requirements Analysis vs Domain modelling</h2><ul>
+<li><strong>需求分析</strong>决定了外部行为 (external behaviour)<blockquote>
+<p>未来的系统特点是什么，谁需要这些特点 (<strong>actors</strong>)</p>
+</blockquote>
+</li>
+<li>领域建模决定了 内部行为 (internal behaviour)<blockquote>
+<p>未来系统的元素如何互动以产生外部行为</p>
+</blockquote>
+</li>
+</ul>
+<p>需求分析和领域建模是**相互依赖(mutually dependent)**的，领域建模支持需求的澄清(clarification of reqs)，而需求分析有助于建立模型</p>
+<h2 id="What-is-a-domain"><a href="#What-is-a-domain" class="headerlink" title="What is a domain"></a>What is a domain</h2><ul>
+<li>Domian: 与解决问题有关的知识领域<blockquote>
+<p>Domain expert 领域专家：该领域的专家<br>例如：再蛋糕装饰领域， 蛋糕装饰师是领域专家</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="无处不在的语言-Ubiquitous-Language"><a href="#无处不在的语言-Ubiquitous-Language" class="headerlink" title="无处不在的语言 Ubiquitous Language"></a>无处不在的语言 Ubiquitous Language</h2><ul>
+<li><em>我们设计中的事物必须代表领域专家心智模型中的真正事物</em></li>
+<li>例如，如果领域专家称某物为 “<strong>订单order</strong>”， 则在我们的领域模型和我们的最终实现中，应该有一个叫做 <strong>订单order</strong> 的东西</li>
+<li>同样地， 我们的领域模型不应该包含 OrderHelper&#x2F;OrderManager等<blockquote>
+<p>技术细节不构成领域模型的一部分，因为其不属于设计</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="名词-x2F-动词分析-Noun-x2F-Verb-analysis"><a href="#名词-x2F-动词分析-Noun-x2F-Verb-analysis" class="headerlink" title="名词&#x2F;动词分析 Noun&#x2F;Verb analysis"></a>名词&#x2F;动词分析 Noun&#x2F;Verb analysis</h2><ul>
+<li>通过寻找需求中的名词和东西来找到领域的泛在语言</li>
+<li><em>名词</em>是领域模型中可能存在的<em>实体</em>，<strong>动词</strong>是可能存在的<strong>行为</strong></li>
+</ul>
+<h2 id="样例分析"><a href="#样例分析" class="headerlink" title="样例分析"></a>样例分析</h2><ul>
+<li>图例： <em>名词</em>  <strong>动词</strong></li>
+</ul>
+<ul>
+<li><em>游客</em>的<em>日程安排</em>至少涉及一个甚至几个<em>城市</em></li>
+<li><em>酒店</em>有各种不同<em>等级</em>的<em>房间</em>：标准间和高级间</li>
+<li><em>旅游团</em>是以标准价或高级价<strong>预订</strong>的，表明了<em>酒店房间</em>的<em>等级</em>。</li>
+<li>在<em>旅游</em>的每个<em>城市</em>，<em>游客</em>都会被<strong>预订</strong>到所选<em>等级</em>的<em>酒店房间</em>。</li>
+<li>游客<strong>预订</strong>的每个房间都有一个到达<em>日期</em>和一个离开<em>日期</em>。</li>
+<li><em>酒店</em>的<em>名称</em>（例如：墨尔本凯悦酒店）和<em>房间</em>的<em>编号</em>都会被识别。</li>
+<li><em>游客</em>可以在他们的<em>旅程</em>上<strong>预订、取消或更新</strong><em>日程</em>。</li>
+</ul>
+<hr>
+<ul>
+<li><em>Tourists</em> have <em>schedules</em> that involve at least one and possibly several <em>cities</em></li>
+<li><em>Hotels</em> have a variety of <em>rooms</em> of different <em>grades</em>: standard and premium</li>
+<li><em>Tours</em> are <strong>booked</strong> at either a standard or premium rate, indicating the <em>grade</em> of hotel <em>room</em></li>
+<li>In each <em>city</em> of their <em>tour</em>, a <em>tourist</em> is <em>booked</em> into a hotel <em>room</em> of the chosen <em>grade</em></li>
+<li>Each room <em>booking</em> made by a tourist has an arrival <em>date</em> and a departure <em>date</em></li>
+<li><em>Hotels</em> are identified by a <em>name</em> (e.g. Melbourne Hyatt) and <em>rooms</em> by a <em>number</em></li>
+<li><em>Tourists</em> may <strong>book, cancel or update</strong> <em>schedules</em> in their <em>tour</em></li>
+</ul>
+<h2 id="UML-类图"><a href="#UML-类图" class="headerlink" title="UML 类图"></a>UML 类图</h2><img src="/2023/06/09/2511-Design-note/1.png" class="" title="UML Class &amp; diagrams">
+
+<h3 id="Dependency-依赖"><a href="#Dependency-依赖" class="headerlink" title="Dependency 依赖"></a>Dependency 依赖</h3><p>Dependency是最松散的关系形式， 即一个类在某种程度上依赖于另一个类</p>
+<img src="/2023/06/09/2511-Design-note/2.png" class="" title="Dependency">
+
+<h3 id="Association-关联"><a href="#Association-关联" class="headerlink" title="Association 关联"></a>Association 关联</h3><p>一个类以某种方式“使用” 一个类， 当没有箭头指向时，表达的意图为不清楚依赖关系发生在什么方向上</p>
+<img src="/2023/06/09/2511-Design-note/3.png" class="" title="Association">
+
+<h3 id="Directed-Association-指向关联"><a href="#Directed-Association-指向关联" class="headerlink" title="Directed Association 指向关联"></a>Directed Association 指向关联</h3><p>通过指出哪个类对另一个类的了解来完善关联性</p>
+<img src="/2023/06/09/2511-Design-note/4.png" class="" title="Directed Association">
+
+<h3 id="Aggregation-聚合"><a href="#Aggregation-聚合" class="headerlink" title="Aggregation 聚合"></a>Aggregation 聚合</h3><p>一个类包含另一个类(例如： 课程包含学生)， 注意： 钻石型标记应该与包含的类放在一起</p>
+<img src="/2023/06/09/2511-Design-note/5.png" class="" title="Aggregation">
+
+<h3 id="构成-Composition"><a href="#构成-Composition" class="headerlink" title="构成 Composition"></a>构成 Composition</h3><p>类似于聚合，但是包含的类与被包含的类是一体的，被包含的类不能处于容器之外 (e.g. 椅子和椅子腿)</p>
+<img src="/2023/06/09/2511-Design-note/6.png" class="" title="Composition">
+
+<h2 id="UML-Diagram-Types"><a href="#UML-Diagram-Types" class="headerlink" title="UML Diagram Types"></a>UML Diagram Types</h2><img src="/2023/06/09/2511-Design-note/7.png" class="" title="Diagram example 1">
+<hr>
+<img src="/2023/06/09/2511-Design-note/8.png" class="" title="Diagram example 2">
 <div class="alert alert-primary"><div class="icon"><i class="fa fa-refresh"></i></div><div class="text"><p>keep updating</p>
 </div></div></div>
         </div>
@@ -335,7 +416,7 @@
                     <a class="tag-none-link" href="/tags/COMP2511/" rel="tag">COMP2511</a>
                 </div>
                 <div class="pull-date">
-                    <time datetime="2023-06-08T16:01:18.500Z" itemprop="dateModified">最后编辑：2023-06-09</time>
+                    <time datetime="2023-06-13T15:04:53.686Z" itemprop="dateModified">最后编辑：2023-06-14</time>
                 </div>
             </div>
         </footer>
@@ -432,6 +513,18 @@
 </aside>
             
                     <div class="sticky-area">
+                
+                    <aside id="krw-toc" class="widget widget-kratos-toc clearfix toc-div-class" >
+    <div class="photo-background"></div>
+    <h4 class="widget-title no-after">
+        <i class="fa fa-compass"></i>
+        文章目录
+        <span class="toc-progress-bar" role="progressbar" aria-label="阅读进度："></span>
+    </h4>
+    <div class="textwidget">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8UML%E7%9A%84Domain-Modelling"><span class="toc-text">使用UML的Domain Modelling</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%86%E5%9F%9F%E6%A8%A1%E5%9E%8B-Domain-models"><span class="toc-text">领域模型 Domain models</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90-amp-%E9%A2%86%E5%9F%9F%E5%BB%BA%E6%A8%A1-Requirements-Analysis-vs-Domain-modelling"><span class="toc-text">需求分析 &amp; 领域建模 Requirements Analysis vs Domain modelling</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#What-is-a-domain"><span class="toc-text">What is a domain</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%A0%E5%A4%84%E4%B8%8D%E5%9C%A8%E7%9A%84%E8%AF%AD%E8%A8%80-Ubiquitous-Language"><span class="toc-text">无处不在的语言 Ubiquitous Language</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8D%E8%AF%8D-x2F-%E5%8A%A8%E8%AF%8D%E5%88%86%E6%9E%90-Noun-x2F-Verb-analysis"><span class="toc-text">名词&#x2F;动词分析 Noun&#x2F;Verb analysis</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B7%E4%BE%8B%E5%88%86%E6%9E%90"><span class="toc-text">样例分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UML-%E7%B1%BB%E5%9B%BE"><span class="toc-text">UML 类图</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Dependency-%E4%BE%9D%E8%B5%96"><span class="toc-text">Dependency 依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Association-%E5%85%B3%E8%81%94"><span class="toc-text">Association 关联</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Directed-Association-%E6%8C%87%E5%90%91%E5%85%B3%E8%81%94"><span class="toc-text">Directed Association 指向关联</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Aggregation-%E8%81%9A%E5%90%88"><span class="toc-text">Aggregation 聚合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%84%E6%88%90-Composition"><span class="toc-text">构成 Composition</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UML-Diagram-Types"><span class="toc-text">UML Diagram Types</span></a></li></ol></li></ol>
+    </div>
+</aside>
                 
                 
   <aside id="krw-categories" class="widget widget-kratos-categories clearfix">
